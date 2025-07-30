@@ -14,6 +14,34 @@ import 'dart:async' as _i2;
 import 'package:helawork_client/src/protocol/greeting.dart' as _i3;
 import 'protocol.dart' as _i4;
 
+/// {@category Endpoint}
+class EndpointUser extends _i1.EndpointRef {
+  EndpointUser(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'user';
+
+  _i2.Future<Map<String, dynamic>> getUserProfile(int userId) =>
+      caller.callServerEndpoint<Map<String, dynamic>>(
+        'user',
+        'getUserProfile',
+        {'userId': userId},
+      );
+
+  _i2.Future<bool> updateUserName(
+    int userId,
+    String newName,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'user',
+        'updateUserName',
+        {
+          'userId': userId,
+          'newName': newName,
+        },
+      );
+}
+
 /// This is an example endpoint that returns a greeting message through
 /// its [hello] method.
 /// {@category Endpoint}
@@ -58,13 +86,19 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    user = EndpointUser(this);
     greeting = EndpointGreeting(this);
   }
+
+  late final EndpointUser user;
 
   late final EndpointGreeting greeting;
 
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {'greeting': greeting};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'user': user,
+        'greeting': greeting,
+      };
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};

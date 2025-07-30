@@ -4,5 +4,5 @@ table: user
 fields:
   name: String
   email: String
-  role: String  # 'worker' or 'employer'
+  role: String  
   createdAt: DateTime
