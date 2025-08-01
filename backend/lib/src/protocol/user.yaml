@@ -1,0 +1,10 @@
+class: User
+table: user
+fields:
+  fullName: String
+  email: String
+  phoneNumber: String
+  passwordHash: String
+  role: String # 'worker' or 'employer'
+  createdAt: DateTime
+  lastLogin: DateTime?

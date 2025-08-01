@@ -11,3 +11,4 @@
 library protocol;
 
 export 'greeting.dart';
+export 'user.dart';

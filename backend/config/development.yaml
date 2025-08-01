@@ -30,9 +30,10 @@ webServer:
 # This is the database setup for your server.
 database:
   host: localhost
-  port: 5432
+  port: 8090
   name: helawork
   user: postgres
+  password: macha
   #requireSsl: true # defaults to false
   #isUnixSocket: true # defaults to false
 
