@@ -1,8 +1,8 @@
 class: Payment
 table: payment
 fields:
-  id: int, primary, auto
-  userId: int, relation(user)
+  id: int?
+  userId: int?
   totalHours: double
   ratePerHour: double
   totalAmount: double

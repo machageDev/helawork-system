@@ -1,10 +1,9 @@
 class: Task
 table: task
 fields:
-  id: int, primary, auto
+  id: int?
   title: String
   description: String
   deadline: DateTime
-  assignedTo: int, relation(user)
   status: String # 'pending', 'in_progress', 'completed', 'approved', 'rejected'
   createdAt: DateTime

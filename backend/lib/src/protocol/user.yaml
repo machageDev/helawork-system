@@ -1,9 +1,12 @@
 class: User
 table: user
 fields:
- id: int, primary, auto
- fullName: String
- email: String, Unique
- passwordHash: String
- createdAT: DateTime
-
+  id: int?
+  fullName: String
+  email: String
+  passwordHash: String
+  createdAt: DateTime
+indexes:
+  user_email_unique:
+    fields: email
+    unique: true
