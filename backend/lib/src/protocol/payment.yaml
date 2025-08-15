@@ -1,0 +1,11 @@
+class: Payment
+table: payment
+fields:
+  id: int, primary, auto
+  userId: int, relation(user)
+  totalHours: double
+  ratePerHour: double
+  totalAmount: double
+  paymentMethod: String
+  status: String # 'pending', 'completed', 'failed'
+  createdAt: DateTime

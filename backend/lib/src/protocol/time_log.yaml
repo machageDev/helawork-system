@@ -1,0 +1,9 @@
+class: TimeLog
+table: time_log
+fields:
+  id: int, primary, auto
+  userId: int, relation(user)
+  taskId: int, relation(task)
+  startTime: DateTime
+  endTime: DateTime?
+  approved: bool
