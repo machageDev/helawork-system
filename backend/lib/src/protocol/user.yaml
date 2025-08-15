@@ -1,10 +1,9 @@
 class: User
 table: user
 fields:
-  fullName: String
-  email: String
-  phoneNumber: String
-  passwordHash: String
-  role: String # 'worker' or 'employer'
-  createdAt: DateTime
-  lastLogin: DateTime?
+ id: int, primary, auto
+ fullName: String
+ email: String, Unique
+ passwordHash: String
+ createdAT: DateTime
+
