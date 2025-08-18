@@ -1,69 +1,50 @@
 import 'package:serverpod/serverpod.dart';
-import 'package:crypto/crypto.dart';   
-import 'dart:convert';                 
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
-import '../generated/protocol.dart';   
+import '../generated/protocol.dart'; 
 
 class AuthEndpoint extends Endpoint {
-  // REGISTER USER
-  Future<User?> register(
-    Session session,
-    String fullName,
-    String email,
-    String password,
-    String role,
-  ) async {
+  // REGISTER
+  Future<User?> register(Session session, String fullName, String email, String password, String role) async {
     
-    var existing = await User.findSingleRow(
+    var existing = await User.db.findFirstRow(
       session,
       where: (u) => u.email.equals(email),
     );
-    if (existing != null) {
-      return null; 
-    }
+    if (existing != null) return null;
 
-    
+
     var hashedPassword = sha256.convert(utf8.encode(password)).toString();
 
-    // Create new user
+    // Create user
     var user = User(
       fullName: fullName,
       email: email,
-      password: hashedPassword,
-      role: role,
-      createdAt: DateTime.now(), passwordHash: '',
+      passwordHash: hashedPassword,
+  
+      createdAt: DateTime.now(),
     );
 
-    // Insert into database
-    await User.insert(session, user);
-
-    return user;
+    
+    var insertedUser = await User.db.insertRow(session, user);
+    return insertedUser;
   }
 
-  // LOGIN USER
-  Future<User?> login(
-    Session session,
-    String email,
-    String password,
-  ) async {
-    
-    var user = await User.findSingleRow(
+  // LOGIN
+  Future<User?> login(Session session, String email, String password) async {
+    var user = await User.db.findFirstRow(
       session,
       where: (u) => u.email.equals(email),
     );
+    if (user == null) return null;
 
-    if (user == null) {
-      return null; 
-    }
-
-    
     var hashedPassword = sha256.convert(utf8.encode(password)).toString();
-    if (user.password != hashedPassword) {
-      return null; 
-    }
+    if (user.passwordHash != hashedPassword) return null;
 
+  
     
-    session.authenticatedUserId = user.id;
+
     return user;
   }
 }
