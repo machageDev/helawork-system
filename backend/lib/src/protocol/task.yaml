@@ -5,5 +5,6 @@ fields:
   title: String
   description: String
   deadline: DateTime
-  status: String # 'pending', 'in_progress', 'completed', 'approved', 'rejected'
+  status: String 
   createdAt: DateTime
+  assignedTo: int
