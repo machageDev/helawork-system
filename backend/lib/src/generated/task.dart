@@ -19,6 +19,7 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     required this.deadline,
     required this.status,
     required this.createdAt,
+    required this.assignedTo,
   });
 
   factory Task({
@@ -28,6 +29,7 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     required DateTime deadline,
     required String status,
     required DateTime createdAt,
+    required int assignedTo,
   }) = _TaskImpl;
 
   factory Task.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -40,6 +42,7 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       status: jsonSerialization['status'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      assignedTo: jsonSerialization['assignedTo'] as int,
     );
   }
 
@@ -60,6 +63,8 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   DateTime createdAt;
 
+  int assignedTo;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -73,6 +78,7 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? deadline,
     String? status,
     DateTime? createdAt,
+    int? assignedTo,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -83,6 +89,7 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       'deadline': deadline.toJson(),
       'status': status,
       'createdAt': createdAt.toJson(),
+      'assignedTo': assignedTo,
     };
   }
 
@@ -95,6 +102,7 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       'deadline': deadline.toJson(),
       'status': status,
       'createdAt': createdAt.toJson(),
+      'assignedTo': assignedTo,
     };
   }
 
@@ -138,6 +146,7 @@ class _TaskImpl extends Task {
     required DateTime deadline,
     required String status,
     required DateTime createdAt,
+    required int assignedTo,
   }) : super._(
           id: id,
           title: title,
@@ -145,6 +154,7 @@ class _TaskImpl extends Task {
           deadline: deadline,
           status: status,
           createdAt: createdAt,
+          assignedTo: assignedTo,
         );
 
   /// Returns a shallow copy of this [Task]
@@ -158,6 +168,7 @@ class _TaskImpl extends Task {
     DateTime? deadline,
     String? status,
     DateTime? createdAt,
+    int? assignedTo,
   }) {
     return Task(
       id: id is int? ? id : this.id,
@@ -166,6 +177,7 @@ class _TaskImpl extends Task {
       deadline: deadline ?? this.deadline,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
+      assignedTo: assignedTo ?? this.assignedTo,
     );
   }
 }
@@ -192,6 +204,10 @@ class TaskTable extends _i1.Table<int?> {
       'createdAt',
       this,
     );
+    assignedTo = _i1.ColumnInt(
+      'assignedTo',
+      this,
+    );
   }
 
   late final _i1.ColumnString title;
@@ -204,6 +220,8 @@ class TaskTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime createdAt;
 
+  late final _i1.ColumnInt assignedTo;
+
   @override
   List<_i1.Column> get columns => [
         id,
@@ -212,6 +230,7 @@ class TaskTable extends _i1.Table<int?> {
         deadline,
         status,
         createdAt,
+        assignedTo,
       ];
 }
 

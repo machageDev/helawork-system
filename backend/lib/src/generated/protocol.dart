@@ -16,6 +16,9 @@ import 'payment.dart' as _i4;
 import 'task.dart' as _i5;
 import 'time_log.dart' as _i6;
 import 'user.dart' as _i7;
+import 'package:helawork_server/src/generated/payment.dart' as _i8;
+import 'package:helawork_server/src/generated/task.dart' as _i9;
+import 'package:helawork_server/src/generated/time_log.dart' as _i10;
 export 'greeting.dart';
 export 'payment.dart';
 export 'task.dart';
@@ -146,6 +149,12 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
           dartType: 'DateTime',
+        ),
+        _i2.ColumnDefinition(
+          name: 'assignedTo',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
         ),
       ],
       foreignKeys: [],
@@ -336,9 +345,16 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.User?>()) {
       return (data != null ? _i7.User.fromJson(data) : null) as T;
     }
-    if (t == Map<String, dynamic>) {
-      return (data as Map).map((k, v) =>
-          MapEntry(deserialize<String>(k), deserialize<dynamic>(v))) as T;
+    if (t == List<_i8.Payment>) {
+      return (data as List).map((e) => deserialize<_i8.Payment>(e)).toList()
+          as T;
+    }
+    if (t == List<_i9.Task>) {
+      return (data as List).map((e) => deserialize<_i9.Task>(e)).toList() as T;
+    }
+    if (t == List<_i10.TimeLog>) {
+      return (data as List).map((e) => deserialize<_i10.TimeLog>(e)).toList()
+          as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);

@@ -1,5 +1,18 @@
-user:
-  - getUserProfile:
-  - updateUserName:
+auth:
+  - register:
+  - login:
+payment:
+  - createPayment:
+  - completePayment:
+  - getUserPayments:
+task:
+  - createTask:
+  - getUserTasks:
+  - updateTaskStatus:
+timeLog:
+  - startLog:
+  - stopLog:
+  - getUserLogs:
+  - approveLog:
 greeting:
   - hello:

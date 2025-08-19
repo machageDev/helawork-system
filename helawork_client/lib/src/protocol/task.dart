@@ -19,6 +19,7 @@ abstract class Task implements _i1.SerializableModel {
     required this.deadline,
     required this.status,
     required this.createdAt,
+    required this.assignedTo,
   });
 
   factory Task({
@@ -28,6 +29,7 @@ abstract class Task implements _i1.SerializableModel {
     required DateTime deadline,
     required String status,
     required DateTime createdAt,
+    required int assignedTo,
   }) = _TaskImpl;
 
   factory Task.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -40,6 +42,7 @@ abstract class Task implements _i1.SerializableModel {
       status: jsonSerialization['status'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      assignedTo: jsonSerialization['assignedTo'] as int,
     );
   }
 
@@ -58,6 +61,8 @@ abstract class Task implements _i1.SerializableModel {
 
   DateTime createdAt;
 
+  int assignedTo;
+
   /// Returns a shallow copy of this [Task]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -68,6 +73,7 @@ abstract class Task implements _i1.SerializableModel {
     DateTime? deadline,
     String? status,
     DateTime? createdAt,
+    int? assignedTo,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -78,6 +84,7 @@ abstract class Task implements _i1.SerializableModel {
       'deadline': deadline.toJson(),
       'status': status,
       'createdAt': createdAt.toJson(),
+      'assignedTo': assignedTo,
     };
   }
 
@@ -97,6 +104,7 @@ class _TaskImpl extends Task {
     required DateTime deadline,
     required String status,
     required DateTime createdAt,
+    required int assignedTo,
   }) : super._(
           id: id,
           title: title,
@@ -104,6 +112,7 @@ class _TaskImpl extends Task {
           deadline: deadline,
           status: status,
           createdAt: createdAt,
+          assignedTo: assignedTo,
         );
 
   /// Returns a shallow copy of this [Task]
@@ -117,6 +126,7 @@ class _TaskImpl extends Task {
     DateTime? deadline,
     String? status,
     DateTime? createdAt,
+    int? assignedTo,
   }) {
     return Task(
       id: id is int? ? id : this.id,
@@ -125,6 +135,7 @@ class _TaskImpl extends Task {
       deadline: deadline ?? this.deadline,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
+      assignedTo: assignedTo ?? this.assignedTo,
     );
   }
 }

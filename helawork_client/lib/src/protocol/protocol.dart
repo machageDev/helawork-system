@@ -15,6 +15,9 @@ import 'payment.dart' as _i3;
 import 'task.dart' as _i4;
 import 'time_log.dart' as _i5;
 import 'user.dart' as _i6;
+import 'package:helawork_client/src/protocol/payment.dart' as _i7;
+import 'package:helawork_client/src/protocol/task.dart' as _i8;
+import 'package:helawork_client/src/protocol/time_log.dart' as _i9;
 export 'greeting.dart';
 export 'payment.dart';
 export 'task.dart';
@@ -65,9 +68,16 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i6.User?>()) {
       return (data != null ? _i6.User.fromJson(data) : null) as T;
     }
-    if (t == Map<String, dynamic>) {
-      return (data as Map).map((k, v) =>
-          MapEntry(deserialize<String>(k), deserialize<dynamic>(v))) as T;
+    if (t == List<_i7.Payment>) {
+      return (data as List).map((e) => deserialize<_i7.Payment>(e)).toList()
+          as T;
+    }
+    if (t == List<_i8.Task>) {
+      return (data as List).map((e) => deserialize<_i8.Task>(e)).toList() as T;
+    }
+    if (t == List<_i9.TimeLog>) {
+      return (data as List).map((e) => deserialize<_i9.TimeLog>(e)).toList()
+          as T;
     }
     return super.deserialize<T>(data, t);
   }
