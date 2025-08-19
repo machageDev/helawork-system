@@ -8,7 +8,7 @@ import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:helawork_client/helawork_client.dart';
 
 // Screens
-import 'login.dart';
+import 'screens/login.dart';
 // import 'register.dart';
 // import 'forgot_password.dart';
 // import 'home.dart';
