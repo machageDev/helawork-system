@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 // Import your generated Serverpod client
@@ -13,10 +12,9 @@ import 'screens/login.dart';
 // import 'forgot_password.dart';
 // import 'home.dart';
 
-/// Global Serverpod client
+
 late Client client;
 
-/// Bootstraps the application before runApp()
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
 
