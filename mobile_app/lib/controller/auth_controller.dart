@@ -1,6 +1,8 @@
 class User {
   final String name;
   User({required this.name});
+
+  get email => null;
 }
 
 class AuthController {

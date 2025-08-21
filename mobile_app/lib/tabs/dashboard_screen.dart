@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:helawork_flutter/controller/task_controller.dart';
 
 class DashboardScreen extends StatelessWidget {
   final TaskController taskController;
-  final AttendanceController attendanceController;
 
   const DashboardScreen({
     super.key,
     required this.taskController,
-    required this.attendanceController,
   });
 
   @override
@@ -16,8 +14,6 @@ class DashboardScreen extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
 
     final openTasks = taskController.openTasksCount;
-    final totalWorked = attendanceController.totalWorked.inHours;
-    final estimatedPay = totalWorked * 300;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -33,23 +29,7 @@ class DashboardScreen extends StatelessWidget {
                   color: cs.primary,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _StatCard(
-                  label: 'Hours Worked',
-                  value: '$totalWorked h',
-                  icon: Icons.timer,
-                  color: cs.secondary,
-                ),
-              ),
             ],
-          ),
-          const SizedBox(height: 12),
-          _StatCard(
-            label: 'Earnings',
-            value: 'KES $estimatedPay',
-            icon: Icons.payments,
-            color: Colors.green,
           ),
         ],
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../controllers/auth_controller.dart';
-import '../login_screen.dart';
+import 'package:helawork_flutter/controller/auth_controller.dart';
+import 'package:helawork_flutter/screens/login.dart';
 
 class ProfileScreen extends StatelessWidget {
   final AuthController auth;
@@ -29,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
             onPressed: () {
               auth.logout();
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                MaterialPageRoute(builder: (_) => const LoginPage()),
                 (route) => false,
               );
             },
