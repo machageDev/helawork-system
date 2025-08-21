@@ -12,17 +12,16 @@ import 'screens/login.dart';
 // import 'forgot_password.dart';
 // import 'home.dart';
 
-
 late Client client;
 
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables depending on build mode
-  await dotenv.load(fileName: kReleaseMode ? ".env.prod" : ".env.dev");
+  // Initialize Serverpod client depending on build mode
+  final serverUrl = kReleaseMode
+      ? 'https://your-production-server.com/' // Production URL
+      : 'http://localhost:8080/';             // Development URL
 
-  // Initialize Serverpod client
-  final serverUrl = dotenv.env['SERVER_URL'] ?? 'http://localhost:8080/';
   client = Client(serverUrl)
     ..connectivityMonitor = FlutterConnectivityMonitor();
 }

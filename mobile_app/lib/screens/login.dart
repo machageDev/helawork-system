@@ -29,10 +29,10 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailController.text.trim();
       final password = _passwordController.text.trim();
 
-      // Example login call to your endpoint
-      final success = await client.userEndpoint.login(email, password);
+      
+      final success = await client.auth.login(email, password);
 
-      if (success) {
+      if (success != null) {
         if (!mounted) return;
         Navigator.pushReplacementNamed(context, '/home');
       } else {
