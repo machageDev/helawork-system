@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:helawork_flutter/controller/auth_controller.dart';
+import 'package:helawork_flutter/controller/task_controller.dart';
+import 'package:helawork_flutter/tabs/dashboard_screen.dart';
+import 'package:helawork_flutter/tabs/profile.dart';
+import 'package:helawork_flutter/tabs/tasks_screen.dart';
 
 class Shell extends StatefulWidget {
   final AuthController auth;
@@ -12,9 +16,8 @@ class Shell extends StatefulWidget {
 class _ShellState extends State<Shell> {
   int _index = 0;
 
-  // Shared controllers for all tabs
+  // Shared controllers for tabs
   final taskController = TaskController();
-  final attendanceController = AttendanceController();
 
   late final List<Widget> _tabs;
 
@@ -22,12 +25,8 @@ class _ShellState extends State<Shell> {
   void initState() {
     super.initState();
     _tabs = [
-      DashboardScreen(
-        taskController: taskController,
-        attendanceController: attendanceController,
-      ),
+      DashboardScreen(taskController: taskController),
       TasksScreen(taskController: taskController),
-      AttendanceScreen(attendanceController: attendanceController),
       ProfileScreen(auth: widget.auth),
     ];
   }
@@ -57,11 +56,6 @@ class _ShellState extends State<Shell> {
             icon: Icon(Icons.checklist_outlined),
             selectedIcon: Icon(Icons.checklist),
             label: 'Tasks',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.access_time),
-            selectedIcon: Icon(Icons.punch_clock),
-            label: 'Attendance',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),

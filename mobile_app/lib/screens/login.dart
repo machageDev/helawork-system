@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      // Replace with your Serverpod client instance
+      
       final client = Client('http://localhost:8080/')
         ..connectivityMonitor = FlutterConnectivityMonitor();
 
