@@ -1,13 +1,10 @@
 class: TimeLog
 table: time_log
 fields:
-  taskId: int, relation(parent=task)
+  id: int?
   workerId: int, relation(parent=user)
+  taskId: int, relation(parent=task)
   startedAt: DateTime
-  endedAt: DateTime
-  durationMinutes: int
-  note: String?
-  approved: bool?
-  approvedById: int?, relation(parent=user)
-  approvedAt: DateTime?
-  createdAt: DateTime
+  endedAt: DateTime?
+  durationMinutes: int?
+  createdAt: DateTime?

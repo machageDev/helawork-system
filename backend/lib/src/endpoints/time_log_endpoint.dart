@@ -3,23 +3,26 @@ import '../generated/protocol.dart';
 
 class TimeLogEndpoint extends Endpoint {
   // Start logging manually
-  Future<TimeLog> startLog(Session session, int workerId, {int? taskId}) async {
-    var log = TimeLog(
-      taskId: taskId,
-      workerId: workerId,
-      startedAt: DateTime.now(),
-    );
-    await TimeLog.db.insertRow(session, log);
-    return log;
-  }
+ Future<TimeLog> startLog(Session session, int workerId, int taskId) async {
+  var log = TimeLog(
+    workerId: workerId,
+    taskId: taskId,
+    startedAt: DateTime.now(),
+    createdAt: DateTime.now(),
+  );
+
+  await TimeLog.db.insertRow(session, log);
+  return log;
+}
+
 
   // Stop log
   Future<TimeLog?> stopLog(Session session, int logId) async {
     var log = await TimeLog.db.findById(session, logId);
     if (log == null) throw Exception("Log not found");
 
-    log.endTime = DateTime.now();
-    log.durationMinutes = log.endTime!.difference(log.startTime).inMinutes;
+    log.endedAt = DateTime.now();
+    log.durationMinutes = log.endedAt!.difference(log.startedAt).inMinutes;
 
     await TimeLog.db.updateRow(session, log);
     return log;

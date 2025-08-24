@@ -15,49 +15,38 @@ abstract class TimeLog
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   TimeLog._({
     this.id,
-    required this.taskId,
     required this.workerId,
+    required this.taskId,
     required this.startedAt,
-    required this.endedAt,
-    required this.durationMinutes,
-    this.note,
-    this.approved,
-    this.approvedById,
-    this.approvedAt,
-    required this.createdAt,
+    this.endedAt,
+    this.durationMinutes,
+    this.createdAt,
   });
 
   factory TimeLog({
     int? id,
-    required int taskId,
     required int workerId,
+    required int taskId,
     required DateTime startedAt,
-    required DateTime endedAt,
-    required int durationMinutes,
-    String? note,
-    bool? approved,
-    int? approvedById,
-    DateTime? approvedAt,
-    required DateTime createdAt,
+    DateTime? endedAt,
+    int? durationMinutes,
+    DateTime? createdAt,
   }) = _TimeLogImpl;
 
   factory TimeLog.fromJson(Map<String, dynamic> jsonSerialization) {
     return TimeLog(
       id: jsonSerialization['id'] as int?,
-      taskId: jsonSerialization['taskId'] as int,
       workerId: jsonSerialization['workerId'] as int,
+      taskId: jsonSerialization['taskId'] as int,
       startedAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
-      endedAt: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
-      durationMinutes: jsonSerialization['durationMinutes'] as int,
-      note: jsonSerialization['note'] as String?,
-      approved: jsonSerialization['approved'] as bool?,
-      approvedById: jsonSerialization['approvedById'] as int?,
-      approvedAt: jsonSerialization['approvedAt'] == null
+      endedAt: jsonSerialization['endedAt'] == null
           ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['approvedAt']),
-      createdAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
+      durationMinutes: jsonSerialization['durationMinutes'] as int?,
+      createdAt: jsonSerialization['createdAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
   }
 
@@ -68,25 +57,17 @@ abstract class TimeLog
   @override
   int? id;
 
-  int taskId;
-
   int workerId;
+
+  int taskId;
 
   DateTime startedAt;
 
-  DateTime endedAt;
+  DateTime? endedAt;
 
-  int durationMinutes;
+  int? durationMinutes;
 
-  String? note;
-
-  bool? approved;
-
-  int? approvedById;
-
-  DateTime? approvedAt;
-
-  DateTime createdAt;
+  DateTime? createdAt;
 
   @override
   _i1.Table<int?> get table => t;
@@ -96,31 +77,23 @@ abstract class TimeLog
   @_i1.useResult
   TimeLog copyWith({
     int? id,
-    int? taskId,
     int? workerId,
+    int? taskId,
     DateTime? startedAt,
     DateTime? endedAt,
     int? durationMinutes,
-    String? note,
-    bool? approved,
-    int? approvedById,
-    DateTime? approvedAt,
     DateTime? createdAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'taskId': taskId,
       'workerId': workerId,
+      'taskId': taskId,
       'startedAt': startedAt.toJson(),
-      'endedAt': endedAt.toJson(),
-      'durationMinutes': durationMinutes,
-      if (note != null) 'note': note,
-      if (approved != null) 'approved': approved,
-      if (approvedById != null) 'approvedById': approvedById,
-      if (approvedAt != null) 'approvedAt': approvedAt?.toJson(),
-      'createdAt': createdAt.toJson(),
+      if (endedAt != null) 'endedAt': endedAt?.toJson(),
+      if (durationMinutes != null) 'durationMinutes': durationMinutes,
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
 
@@ -128,16 +101,12 @@ abstract class TimeLog
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      'taskId': taskId,
       'workerId': workerId,
+      'taskId': taskId,
       'startedAt': startedAt.toJson(),
-      'endedAt': endedAt.toJson(),
-      'durationMinutes': durationMinutes,
-      if (note != null) 'note': note,
-      if (approved != null) 'approved': approved,
-      if (approvedById != null) 'approvedById': approvedById,
-      if (approvedAt != null) 'approvedAt': approvedAt?.toJson(),
-      'createdAt': createdAt.toJson(),
+      if (endedAt != null) 'endedAt': endedAt?.toJson(),
+      if (durationMinutes != null) 'durationMinutes': durationMinutes,
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
 
@@ -176,27 +145,19 @@ class _Undefined {}
 class _TimeLogImpl extends TimeLog {
   _TimeLogImpl({
     int? id,
-    required int taskId,
     required int workerId,
+    required int taskId,
     required DateTime startedAt,
-    required DateTime endedAt,
-    required int durationMinutes,
-    String? note,
-    bool? approved,
-    int? approvedById,
-    DateTime? approvedAt,
-    required DateTime createdAt,
+    DateTime? endedAt,
+    int? durationMinutes,
+    DateTime? createdAt,
   }) : super._(
           id: id,
-          taskId: taskId,
           workerId: workerId,
+          taskId: taskId,
           startedAt: startedAt,
           endedAt: endedAt,
           durationMinutes: durationMinutes,
-          note: note,
-          approved: approved,
-          approvedById: approvedById,
-          approvedAt: approvedAt,
           createdAt: createdAt,
         );
 
@@ -206,41 +167,34 @@ class _TimeLogImpl extends TimeLog {
   @override
   TimeLog copyWith({
     Object? id = _Undefined,
-    int? taskId,
     int? workerId,
+    int? taskId,
     DateTime? startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    Object? note = _Undefined,
-    Object? approved = _Undefined,
-    Object? approvedById = _Undefined,
-    Object? approvedAt = _Undefined,
-    DateTime? createdAt,
+    Object? endedAt = _Undefined,
+    Object? durationMinutes = _Undefined,
+    Object? createdAt = _Undefined,
   }) {
     return TimeLog(
       id: id is int? ? id : this.id,
-      taskId: taskId ?? this.taskId,
       workerId: workerId ?? this.workerId,
+      taskId: taskId ?? this.taskId,
       startedAt: startedAt ?? this.startedAt,
-      endedAt: endedAt ?? this.endedAt,
-      durationMinutes: durationMinutes ?? this.durationMinutes,
-      note: note is String? ? note : this.note,
-      approved: approved is bool? ? approved : this.approved,
-      approvedById: approvedById is int? ? approvedById : this.approvedById,
-      approvedAt: approvedAt is DateTime? ? approvedAt : this.approvedAt,
-      createdAt: createdAt ?? this.createdAt,
+      endedAt: endedAt is DateTime? ? endedAt : this.endedAt,
+      durationMinutes:
+          durationMinutes is int? ? durationMinutes : this.durationMinutes,
+      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
     );
   }
 }
 
 class TimeLogTable extends _i1.Table<int?> {
   TimeLogTable({super.tableRelation}) : super(tableName: 'time_log') {
-    taskId = _i1.ColumnInt(
-      'taskId',
-      this,
-    );
     workerId = _i1.ColumnInt(
       'workerId',
+      this,
+    );
+    taskId = _i1.ColumnInt(
+      'taskId',
       this,
     );
     startedAt = _i1.ColumnDateTime(
@@ -255,31 +209,15 @@ class TimeLogTable extends _i1.Table<int?> {
       'durationMinutes',
       this,
     );
-    note = _i1.ColumnString(
-      'note',
-      this,
-    );
-    approved = _i1.ColumnBool(
-      'approved',
-      this,
-    );
-    approvedById = _i1.ColumnInt(
-      'approvedById',
-      this,
-    );
-    approvedAt = _i1.ColumnDateTime(
-      'approvedAt',
-      this,
-    );
     createdAt = _i1.ColumnDateTime(
       'createdAt',
       this,
     );
   }
 
-  late final _i1.ColumnInt taskId;
-
   late final _i1.ColumnInt workerId;
+
+  late final _i1.ColumnInt taskId;
 
   late final _i1.ColumnDateTime startedAt;
 
@@ -287,28 +225,16 @@ class TimeLogTable extends _i1.Table<int?> {
 
   late final _i1.ColumnInt durationMinutes;
 
-  late final _i1.ColumnString note;
-
-  late final _i1.ColumnBool approved;
-
-  late final _i1.ColumnInt approvedById;
-
-  late final _i1.ColumnDateTime approvedAt;
-
   late final _i1.ColumnDateTime createdAt;
 
   @override
   List<_i1.Column> get columns => [
         id,
-        taskId,
         workerId,
+        taskId,
         startedAt,
         endedAt,
         durationMinutes,
-        note,
-        approved,
-        approvedById,
-        approvedAt,
         createdAt,
       ];
 }
