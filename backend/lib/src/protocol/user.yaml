@@ -5,8 +5,5 @@ fields:
   fullName: String
   email: String
   passwordHash: String
+  role: String   # "admin" | "employer" | "worker"
   createdAt: DateTime
-indexes:
-  user_email_unique:
-    fields: email
-    unique: true

@@ -1,0 +1,14 @@
+class: MpesaTransaction
+table: mpesa_transaction
+fields:
+  id: int?
+  userId: int, relation(parent=user)        # Worker being paid
+  employerId: int, relation(parent=user)    # Who is paying
+  amount: double
+  phoneNumber: String                       # Worker’s M-PESA number
+  transactionId: String?                    # M-PESA confirmation code
+  status: String                            # "pending" | "success" | "failed"
+  requestPayload: String?                   # JSON sent to Daraja API
+  responsePayload: String?                  # JSON response from Daraja API
+  createdAt: DateTime
+  updatedAt: DateTime

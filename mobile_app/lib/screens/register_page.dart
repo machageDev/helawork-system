@@ -1,140 +1,147 @@
 import 'package:flutter/material.dart';
+import 'package:helawork_client/helawork_client.dart'; // generated client from serverpod
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  bool _loading = false;
+  String? _errorMessage;
+
+  Future<void> _register() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _loading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      // Call your Serverpod auth endpoint
+      var response = await User.authendpoint.registerUser(
+        _fullNameController.text,
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      if (response.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account created successfully!')),
+        );
+        Navigator.pop(context); // go back to login
+      } else {
+        setState(() {
+          _errorMessage = response.errorMessage ?? 'Registration failed';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error: $e';
+      });
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D1117), // Dark background
+      backgroundColor: Colors.black,
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "HelaWork",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  "HelaWork",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: 6),
-              Container(
-                height: 3,
-                width: 60,
-                color: Colors.blue,
-              ),
-              const SizedBox(height: 25),
-              const Text(
-                "Create Your Account",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                const SizedBox(height: 30),
+                TextFormField(
+                  controller: _fullNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Full Name',
+                    hintText: 'Enter your full name',
+                  ),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Full name is required' : null,
                 ),
-              ),
-              const SizedBox(height: 25),
-
-              // Full Name
-              _buildTextField("Full Name", "Enter your full name", false),
-
-              const SizedBox(height: 15),
-
-              // Email
-              _buildTextField("Email", "Enter your email", false),
-
-              const SizedBox(height: 15),
-
-              // Password
-              _buildTextField("Password", "Enter your password", true),
-
-              const SizedBox(height: 15),
-
-              // Confirm Password
-              _buildTextField("Confirm Password", "Confirm your password", true),
-
-              const SizedBox(height: 30),
-
-              // Register Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    hintText: 'Enter your email',
+                  ),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Email is required' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    hintText: 'Enter your password',
+                  ),
+                  validator: (value) =>
+                      value!.length < 6 ? 'Min 6 characters' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm Password',
+                    hintText: 'Confirm your password',
+                  ),
+                  validator: (value) =>
+                      value != _passwordController.text
+                          ? 'Passwords do not match'
+                          : null,
+                ),
+                const SizedBox(height: 24),
+                if (_errorMessage != null)
+                  Text(
+                    _errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  onPressed: _loading ? null : _register,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  onPressed: () {
-                    // TODO: Add registration logic
-                  },
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                  child: _loading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('Register'),
                 ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Already have account
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Already have an account? ",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // TODO: Navigate to Login Page
-                    },
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Helper widget for text fields
-  static Widget _buildTextField(String label, String hint, bool obscure) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
-        ),
-        const SizedBox(height: 6),
-        TextField(
-          obscureText: obscure,
-          style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(color: Colors.white54),
-            filled: true,
-            fillColor: const Color(0xFF161B22),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none,
+              ],
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

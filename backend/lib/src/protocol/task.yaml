@@ -1,10 +1,9 @@
 class: Task
 table: task
 fields:
-  id: int?
+  employerId: int, relation(parent=user)
   title: String
-  description: String
-  deadline: DateTime
-  status: String 
+  description: String?
+  status: String
   createdAt: DateTime
-  assignedTo: int
+  updatedAt: DateTime

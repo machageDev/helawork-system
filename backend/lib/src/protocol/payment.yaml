@@ -1,11 +1,10 @@
-class: Payment
-table: payment
+class: PaymentRate
+table: payment_rate
 fields:
   id: int?
-  userId: int?
-  totalHours: double
+  workerId: int, relation(parent=user)
+  employerId: int, relation(parent=user)
   ratePerHour: double
-  totalAmount: double
-  paymentMethod: String
-  status: String # 'pending', 'completed', 'failed'
+  effectiveFrom: DateTime
+  effectiveTo: DateTime?
   createdAt: DateTime

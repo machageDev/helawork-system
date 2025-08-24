@@ -5,7 +5,7 @@ import 'dart:convert';
 import '../generated/protocol.dart'; 
 
 class AuthEndpoint extends Endpoint {
-  // REGISTER
+  
   Future<User?> register(Session session, String fullName, String email, String password, String role) async {
     
     var existing = await User.db.findFirstRow(
@@ -17,7 +17,7 @@ class AuthEndpoint extends Endpoint {
 
     var hashedPassword = sha256.convert(utf8.encode(password)).toString();
 
-    // Create user
+  
     var user = User(
       fullName: fullName,
       email: email,
