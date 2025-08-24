@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+// ignore: constant_identifier_names
 const Color KPrimaryBlue = Color(0xFF2563EB);
+// ignore: constant_identifier_names
 const Color KAccentOrange = Color(0xFFFF9800);
 
 final InputDecorationTheme inputTheme = InputDecorationTheme(
