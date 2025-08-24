@@ -15,9 +15,11 @@ abstract class Task implements _i1.SerializableModel {
   Task._({
     this.id,
     required this.employerId,
+    this.workerId,
     required this.title,
     this.description,
     required this.status,
+    required this.deadline,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -25,9 +27,11 @@ abstract class Task implements _i1.SerializableModel {
   factory Task({
     int? id,
     required int employerId,
+    int? workerId,
     required String title,
     String? description,
     required String status,
+    required DateTime deadline,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _TaskImpl;
@@ -36,9 +40,12 @@ abstract class Task implements _i1.SerializableModel {
     return Task(
       id: jsonSerialization['id'] as int?,
       employerId: jsonSerialization['employerId'] as int,
+      workerId: jsonSerialization['workerId'] as int?,
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String?,
       status: jsonSerialization['status'] as String,
+      deadline:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['deadline']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       updatedAt:
@@ -53,11 +60,15 @@ abstract class Task implements _i1.SerializableModel {
 
   int employerId;
 
+  int? workerId;
+
   String title;
 
   String? description;
 
   String status;
+
+  DateTime deadline;
 
   DateTime createdAt;
 
@@ -69,9 +80,11 @@ abstract class Task implements _i1.SerializableModel {
   Task copyWith({
     int? id,
     int? employerId,
+    int? workerId,
     String? title,
     String? description,
     String? status,
+    DateTime? deadline,
     DateTime? createdAt,
     DateTime? updatedAt,
   });
@@ -80,9 +93,11 @@ abstract class Task implements _i1.SerializableModel {
     return {
       if (id != null) 'id': id,
       'employerId': employerId,
+      if (workerId != null) 'workerId': workerId,
       'title': title,
       if (description != null) 'description': description,
       'status': status,
+      'deadline': deadline.toJson(),
       'createdAt': createdAt.toJson(),
       'updatedAt': updatedAt.toJson(),
     };
@@ -100,17 +115,21 @@ class _TaskImpl extends Task {
   _TaskImpl({
     int? id,
     required int employerId,
+    int? workerId,
     required String title,
     String? description,
     required String status,
+    required DateTime deadline,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) : super._(
           id: id,
           employerId: employerId,
+          workerId: workerId,
           title: title,
           description: description,
           status: status,
+          deadline: deadline,
           createdAt: createdAt,
           updatedAt: updatedAt,
         );
@@ -122,18 +141,22 @@ class _TaskImpl extends Task {
   Task copyWith({
     Object? id = _Undefined,
     int? employerId,
+    Object? workerId = _Undefined,
     String? title,
     Object? description = _Undefined,
     String? status,
+    DateTime? deadline,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return Task(
       id: id is int? ? id : this.id,
       employerId: employerId ?? this.employerId,
+      workerId: workerId is int? ? workerId : this.workerId,
       title: title ?? this.title,
       description: description is String? ? description : this.description,
       status: status ?? this.status,
+      deadline: deadline ?? this.deadline,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

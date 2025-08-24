@@ -315,6 +315,12 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
+          name: 'workerId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
           name: 'title',
           columnType: _i2.ColumnType.text,
           isNullable: false,
@@ -331,6 +337,12 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.text,
           isNullable: false,
           dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'deadline',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -355,7 +367,17 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.noAction,
           matchType: null,
-        )
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'task_fk_1',
+          columns: ['workerId'],
+          referenceTable: 'user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
       ],
       indexes: [
         _i2.IndexDefinition(
