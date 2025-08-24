@@ -3,6 +3,17 @@ auth:
   - login:
   - forgotPassword:
   - resetPassword:
+mpesaTransaction:
+  - createTransaction:
+  - updateTransaction:
+  - getTransactionsForWorker:
+  - getTransactionsForEmployer:
+  - getTransactionById:
+payment:
+  - createRate:
+  - updateRate:
+  - getActiveRate:
+  - getRatesForWorker:
 task:
   - createTask:
   - assignTask:

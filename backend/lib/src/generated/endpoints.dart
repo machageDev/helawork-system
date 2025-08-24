@@ -11,8 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/auth_endpoint.dart' as _i2;
-import '../endpoints/task_endpoint.dart' as _i3;
-import '../endpoints/time_log_endpoint.dart' as _i4;
+import '../endpoints/mpesa_transaction.dart' as _i3;
+import '../endpoints/payment_endpoin.dart' as _i4;
+import '../endpoints/task_endpoint.dart' as _i5;
+import '../endpoints/time_log_endpoint.dart' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -24,13 +26,25 @@ class Endpoints extends _i1.EndpointDispatch {
           'auth',
           null,
         ),
-      'task': _i3.TaskEndpoint()
+      'mpesaTransaction': _i3.MpesaTransactionEndpoint()
+        ..initialize(
+          server,
+          'mpesaTransaction',
+          null,
+        ),
+      'payment': _i4.PaymentEndpoint()
+        ..initialize(
+          server,
+          'payment',
+          null,
+        ),
+      'task': _i5.TaskEndpoint()
         ..initialize(
           server,
           'task',
           null,
         ),
-      'timeLog': _i4.TimeLogEndpoint()
+      'timeLog': _i6.TimeLogEndpoint()
         ..initialize(
           server,
           'timeLog',
@@ -145,6 +159,245 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
+    connectors['mpesaTransaction'] = _i1.EndpointConnector(
+      name: 'mpesaTransaction',
+      endpoint: endpoints['mpesaTransaction']!,
+      methodConnectors: {
+        'createTransaction': _i1.MethodConnector(
+          name: 'createTransaction',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'employerId': _i1.ParameterDescription(
+              name: 'employerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'amount': _i1.ParameterDescription(
+              name: 'amount',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+            'phoneNumber': _i1.ParameterDescription(
+              name: 'phoneNumber',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['mpesaTransaction'] as _i3.MpesaTransactionEndpoint)
+                  .createTransaction(
+            session,
+            userId: params['userId'],
+            employerId: params['employerId'],
+            amount: params['amount'],
+            phoneNumber: params['phoneNumber'],
+          ),
+        ),
+        'updateTransaction': _i1.MethodConnector(
+          name: 'updateTransaction',
+          params: {
+            'transactionId': _i1.ParameterDescription(
+              name: 'transactionId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'status': _i1.ParameterDescription(
+              name: 'status',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'mpesaCode': _i1.ParameterDescription(
+              name: 'mpesaCode',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'requestPayload': _i1.ParameterDescription(
+              name: 'requestPayload',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'responsePayload': _i1.ParameterDescription(
+              name: 'responsePayload',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['mpesaTransaction'] as _i3.MpesaTransactionEndpoint)
+                  .updateTransaction(
+            session,
+            transactionId: params['transactionId'],
+            status: params['status'],
+            mpesaCode: params['mpesaCode'],
+            requestPayload: params['requestPayload'],
+            responsePayload: params['responsePayload'],
+          ),
+        ),
+        'getTransactionsForWorker': _i1.MethodConnector(
+          name: 'getTransactionsForWorker',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['mpesaTransaction'] as _i3.MpesaTransactionEndpoint)
+                  .getTransactionsForWorker(
+            session,
+            userId: params['userId'],
+          ),
+        ),
+        'getTransactionsForEmployer': _i1.MethodConnector(
+          name: 'getTransactionsForEmployer',
+          params: {
+            'employerId': _i1.ParameterDescription(
+              name: 'employerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['mpesaTransaction'] as _i3.MpesaTransactionEndpoint)
+                  .getTransactionsForEmployer(
+            session,
+            employerId: params['employerId'],
+          ),
+        ),
+        'getTransactionById': _i1.MethodConnector(
+          name: 'getTransactionById',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['mpesaTransaction'] as _i3.MpesaTransactionEndpoint)
+                  .getTransactionById(
+            session,
+            params['id'],
+          ),
+        ),
+      },
+    );
+    connectors['payment'] = _i1.EndpointConnector(
+      name: 'payment',
+      endpoint: endpoints['payment']!,
+      methodConnectors: {
+        'createRate': _i1.MethodConnector(
+          name: 'createRate',
+          params: {
+            'employerId': _i1.ParameterDescription(
+              name: 'employerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'ratePerHour': _i1.ParameterDescription(
+              name: 'ratePerHour',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['payment'] as _i4.PaymentEndpoint).createRate(
+            session,
+            employerId: params['employerId'],
+            workerId: params['workerId'],
+            ratePerHour: params['ratePerHour'],
+          ),
+        ),
+        'updateRate': _i1.MethodConnector(
+          name: 'updateRate',
+          params: {
+            'rateId': _i1.ParameterDescription(
+              name: 'rateId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'newRatePerHour': _i1.ParameterDescription(
+              name: 'newRatePerHour',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['payment'] as _i4.PaymentEndpoint).updateRate(
+            session,
+            rateId: params['rateId'],
+            newRatePerHour: params['newRatePerHour'],
+          ),
+        ),
+        'getActiveRate': _i1.MethodConnector(
+          name: 'getActiveRate',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['payment'] as _i4.PaymentEndpoint).getActiveRate(
+            session,
+            workerId: params['workerId'],
+          ),
+        ),
+        'getRatesForWorker': _i1.MethodConnector(
+          name: 'getRatesForWorker',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['payment'] as _i4.PaymentEndpoint).getRatesForWorker(
+            session,
+            workerId: params['workerId'],
+          ),
+        ),
+      },
+    );
     connectors['task'] = _i1.EndpointConnector(
       name: 'task',
       endpoint: endpoints['task']!,
@@ -177,7 +430,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['task'] as _i3.TaskEndpoint).createTask(
+              (endpoints['task'] as _i5.TaskEndpoint).createTask(
             session,
             params['employerId'],
             params['title'],
@@ -203,7 +456,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['task'] as _i3.TaskEndpoint).assignTask(
+              (endpoints['task'] as _i5.TaskEndpoint).assignTask(
             session,
             params['taskId'],
             params['workerId'],
@@ -227,7 +480,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['task'] as _i3.TaskEndpoint).updateTaskStatus(
+              (endpoints['task'] as _i5.TaskEndpoint).updateTaskStatus(
             session,
             params['taskId'],
             params['status'],
@@ -246,7 +499,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['task'] as _i3.TaskEndpoint).getTasksForEmployer(
+              (endpoints['task'] as _i5.TaskEndpoint).getTasksForEmployer(
             session,
             params['employerId'],
           ),
@@ -264,7 +517,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['task'] as _i3.TaskEndpoint).getTasksForWorker(
+              (endpoints['task'] as _i5.TaskEndpoint).getTasksForWorker(
             session,
             params['workerId'],
           ),
@@ -293,7 +546,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeLog'] as _i4.TimeLogEndpoint).startLog(
+              (endpoints['timeLog'] as _i6.TimeLogEndpoint).startLog(
             session,
             params['workerId'],
             params['taskId'],
@@ -312,7 +565,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeLog'] as _i4.TimeLogEndpoint).stopLog(
+              (endpoints['timeLog'] as _i6.TimeLogEndpoint).stopLog(
             session,
             params['logId'],
           ),
@@ -330,7 +583,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['timeLog'] as _i4.TimeLogEndpoint).getLogsForWorker(
+              (endpoints['timeLog'] as _i6.TimeLogEndpoint).getLogsForWorker(
             session,
             params['workerId'],
           ),

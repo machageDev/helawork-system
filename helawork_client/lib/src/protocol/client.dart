@@ -12,9 +12,11 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:helawork_client/src/protocol/user.dart' as _i3;
-import 'package:helawork_client/src/protocol/task.dart' as _i4;
-import 'package:helawork_client/src/protocol/time_log.dart' as _i5;
-import 'protocol.dart' as _i6;
+import 'package:helawork_client/src/protocol/mpesa_payment.dart' as _i4;
+import 'package:helawork_client/src/protocol/payment.dart' as _i5;
+import 'package:helawork_client/src/protocol/task.dart' as _i6;
+import 'package:helawork_client/src/protocol/time_log.dart' as _i7;
+import 'protocol.dart' as _i8;
 
 /// {@category Endpoint}
 class EndpointAuth extends _i1.EndpointRef {
@@ -75,19 +77,137 @@ class EndpointAuth extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointMpesaTransaction extends _i1.EndpointRef {
+  EndpointMpesaTransaction(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'mpesaTransaction';
+
+  _i2.Future<_i4.MpesaTransaction> createTransaction({
+    required int userId,
+    required int employerId,
+    required double amount,
+    required String phoneNumber,
+  }) =>
+      caller.callServerEndpoint<_i4.MpesaTransaction>(
+        'mpesaTransaction',
+        'createTransaction',
+        {
+          'userId': userId,
+          'employerId': employerId,
+          'amount': amount,
+          'phoneNumber': phoneNumber,
+        },
+      );
+
+  _i2.Future<_i4.MpesaTransaction> updateTransaction({
+    required int transactionId,
+    required String status,
+    String? mpesaCode,
+    String? requestPayload,
+    String? responsePayload,
+  }) =>
+      caller.callServerEndpoint<_i4.MpesaTransaction>(
+        'mpesaTransaction',
+        'updateTransaction',
+        {
+          'transactionId': transactionId,
+          'status': status,
+          'mpesaCode': mpesaCode,
+          'requestPayload': requestPayload,
+          'responsePayload': responsePayload,
+        },
+      );
+
+  _i2.Future<List<_i4.MpesaTransaction>> getTransactionsForWorker(
+          {required int userId}) =>
+      caller.callServerEndpoint<List<_i4.MpesaTransaction>>(
+        'mpesaTransaction',
+        'getTransactionsForWorker',
+        {'userId': userId},
+      );
+
+  _i2.Future<List<_i4.MpesaTransaction>> getTransactionsForEmployer(
+          {required int employerId}) =>
+      caller.callServerEndpoint<List<_i4.MpesaTransaction>>(
+        'mpesaTransaction',
+        'getTransactionsForEmployer',
+        {'employerId': employerId},
+      );
+
+  _i2.Future<_i4.MpesaTransaction?> getTransactionById(int id) =>
+      caller.callServerEndpoint<_i4.MpesaTransaction?>(
+        'mpesaTransaction',
+        'getTransactionById',
+        {'id': id},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointPayment extends _i1.EndpointRef {
+  EndpointPayment(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'payment';
+
+  _i2.Future<_i5.PaymentRate> createRate({
+    required int employerId,
+    required int workerId,
+    required double ratePerHour,
+  }) =>
+      caller.callServerEndpoint<_i5.PaymentRate>(
+        'payment',
+        'createRate',
+        {
+          'employerId': employerId,
+          'workerId': workerId,
+          'ratePerHour': ratePerHour,
+        },
+      );
+
+  _i2.Future<_i5.PaymentRate> updateRate({
+    required int rateId,
+    required double newRatePerHour,
+  }) =>
+      caller.callServerEndpoint<_i5.PaymentRate>(
+        'payment',
+        'updateRate',
+        {
+          'rateId': rateId,
+          'newRatePerHour': newRatePerHour,
+        },
+      );
+
+  _i2.Future<_i5.PaymentRate?> getActiveRate({required int workerId}) =>
+      caller.callServerEndpoint<_i5.PaymentRate?>(
+        'payment',
+        'getActiveRate',
+        {'workerId': workerId},
+      );
+
+  _i2.Future<List<_i5.PaymentRate>> getRatesForWorker(
+          {required int workerId}) =>
+      caller.callServerEndpoint<List<_i5.PaymentRate>>(
+        'payment',
+        'getRatesForWorker',
+        {'workerId': workerId},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointTask extends _i1.EndpointRef {
   EndpointTask(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'task';
 
-  _i2.Future<_i4.Task> createTask(
+  _i2.Future<_i6.Task> createTask(
     int employerId,
     String title,
     String description,
     DateTime deadline,
   ) =>
-      caller.callServerEndpoint<_i4.Task>(
+      caller.callServerEndpoint<_i6.Task>(
         'task',
         'createTask',
         {
@@ -98,11 +218,11 @@ class EndpointTask extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Task?> assignTask(
+  _i2.Future<_i6.Task?> assignTask(
     int taskId,
     int workerId,
   ) =>
-      caller.callServerEndpoint<_i4.Task?>(
+      caller.callServerEndpoint<_i6.Task?>(
         'task',
         'assignTask',
         {
@@ -111,11 +231,11 @@ class EndpointTask extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Task?> updateTaskStatus(
+  _i2.Future<_i6.Task?> updateTaskStatus(
     int taskId,
     String status,
   ) =>
-      caller.callServerEndpoint<_i4.Task?>(
+      caller.callServerEndpoint<_i6.Task?>(
         'task',
         'updateTaskStatus',
         {
@@ -124,15 +244,15 @@ class EndpointTask extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i4.Task>> getTasksForEmployer(int employerId) =>
-      caller.callServerEndpoint<List<_i4.Task>>(
+  _i2.Future<List<_i6.Task>> getTasksForEmployer(int employerId) =>
+      caller.callServerEndpoint<List<_i6.Task>>(
         'task',
         'getTasksForEmployer',
         {'employerId': employerId},
       );
 
-  _i2.Future<List<_i4.Task>> getTasksForWorker(int workerId) =>
-      caller.callServerEndpoint<List<_i4.Task>>(
+  _i2.Future<List<_i6.Task>> getTasksForWorker(int workerId) =>
+      caller.callServerEndpoint<List<_i6.Task>>(
         'task',
         'getTasksForWorker',
         {'workerId': workerId},
@@ -146,11 +266,11 @@ class EndpointTimeLog extends _i1.EndpointRef {
   @override
   String get name => 'timeLog';
 
-  _i2.Future<_i5.TimeLog> startLog(
+  _i2.Future<_i7.TimeLog> startLog(
     int workerId,
     int taskId,
   ) =>
-      caller.callServerEndpoint<_i5.TimeLog>(
+      caller.callServerEndpoint<_i7.TimeLog>(
         'timeLog',
         'startLog',
         {
@@ -159,15 +279,15 @@ class EndpointTimeLog extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.TimeLog?> stopLog(int logId) =>
-      caller.callServerEndpoint<_i5.TimeLog?>(
+  _i2.Future<_i7.TimeLog?> stopLog(int logId) =>
+      caller.callServerEndpoint<_i7.TimeLog?>(
         'timeLog',
         'stopLog',
         {'logId': logId},
       );
 
-  _i2.Future<List<_i5.TimeLog>> getLogsForWorker(int workerId) =>
-      caller.callServerEndpoint<List<_i5.TimeLog>>(
+  _i2.Future<List<_i7.TimeLog>> getLogsForWorker(int workerId) =>
+      caller.callServerEndpoint<List<_i7.TimeLog>>(
         'timeLog',
         'getLogsForWorker',
         {'workerId': workerId},
@@ -190,7 +310,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i6.Protocol(),
+          _i8.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -201,11 +321,17 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     auth = EndpointAuth(this);
+    mpesaTransaction = EndpointMpesaTransaction(this);
+    payment = EndpointPayment(this);
     task = EndpointTask(this);
     timeLog = EndpointTimeLog(this);
   }
 
   late final EndpointAuth auth;
+
+  late final EndpointMpesaTransaction mpesaTransaction;
+
+  late final EndpointPayment payment;
 
   late final EndpointTask task;
 
@@ -214,6 +340,8 @@ class Client extends _i1.ServerpodClientShared {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'auth': auth,
+        'mpesaTransaction': mpesaTransaction,
+        'payment': payment,
         'task': task,
         'timeLog': timeLog,
       };
