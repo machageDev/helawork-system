@@ -17,6 +17,7 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     required this.fullName,
     required this.email,
     required this.passwordHash,
+    required this.role,
     required this.createdAt,
   });
 
@@ -25,6 +26,7 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     required String fullName,
     required String email,
     required String passwordHash,
+    required String role,
     required DateTime createdAt,
   }) = _UserImpl;
 
@@ -34,6 +36,7 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       fullName: jsonSerialization['fullName'] as String,
       email: jsonSerialization['email'] as String,
       passwordHash: jsonSerialization['passwordHash'] as String,
+      role: jsonSerialization['role'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
@@ -52,6 +55,8 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   String passwordHash;
 
+  String role;
+
   DateTime createdAt;
 
   @override
@@ -65,6 +70,7 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     String? fullName,
     String? email,
     String? passwordHash,
+    String? role,
     DateTime? createdAt,
   });
   @override
@@ -74,6 +80,7 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       'fullName': fullName,
       'email': email,
       'passwordHash': passwordHash,
+      'role': role,
       'createdAt': createdAt.toJson(),
     };
   }
@@ -85,6 +92,7 @@ abstract class User implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       'fullName': fullName,
       'email': email,
       'passwordHash': passwordHash,
+      'role': role,
       'createdAt': createdAt.toJson(),
     };
   }
@@ -127,12 +135,14 @@ class _UserImpl extends User {
     required String fullName,
     required String email,
     required String passwordHash,
+    required String role,
     required DateTime createdAt,
   }) : super._(
           id: id,
           fullName: fullName,
           email: email,
           passwordHash: passwordHash,
+          role: role,
           createdAt: createdAt,
         );
 
@@ -145,6 +155,7 @@ class _UserImpl extends User {
     String? fullName,
     String? email,
     String? passwordHash,
+    String? role,
     DateTime? createdAt,
   }) {
     return User(
@@ -152,6 +163,7 @@ class _UserImpl extends User {
       fullName: fullName ?? this.fullName,
       email: email ?? this.email,
       passwordHash: passwordHash ?? this.passwordHash,
+      role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -171,6 +183,10 @@ class UserTable extends _i1.Table<int?> {
       'passwordHash',
       this,
     );
+    role = _i1.ColumnString(
+      'role',
+      this,
+    );
     createdAt = _i1.ColumnDateTime(
       'createdAt',
       this,
@@ -183,6 +199,8 @@ class UserTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString passwordHash;
 
+  late final _i1.ColumnString role;
+
   late final _i1.ColumnDateTime createdAt;
 
   @override
@@ -191,6 +209,7 @@ class UserTable extends _i1.Table<int?> {
         fullName,
         email,
         passwordHash,
+        role,
         createdAt,
       ];
 }

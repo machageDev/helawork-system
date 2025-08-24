@@ -17,6 +17,7 @@ abstract class User implements _i1.SerializableModel {
     required this.fullName,
     required this.email,
     required this.passwordHash,
+    required this.role,
     required this.createdAt,
   });
 
@@ -25,6 +26,7 @@ abstract class User implements _i1.SerializableModel {
     required String fullName,
     required String email,
     required String passwordHash,
+    required String role,
     required DateTime createdAt,
   }) = _UserImpl;
 
@@ -34,6 +36,7 @@ abstract class User implements _i1.SerializableModel {
       fullName: jsonSerialization['fullName'] as String,
       email: jsonSerialization['email'] as String,
       passwordHash: jsonSerialization['passwordHash'] as String,
+      role: jsonSerialization['role'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
@@ -50,6 +53,8 @@ abstract class User implements _i1.SerializableModel {
 
   String passwordHash;
 
+  String role;
+
   DateTime createdAt;
 
   /// Returns a shallow copy of this [User]
@@ -60,6 +65,7 @@ abstract class User implements _i1.SerializableModel {
     String? fullName,
     String? email,
     String? passwordHash,
+    String? role,
     DateTime? createdAt,
   });
   @override
@@ -69,6 +75,7 @@ abstract class User implements _i1.SerializableModel {
       'fullName': fullName,
       'email': email,
       'passwordHash': passwordHash,
+      'role': role,
       'createdAt': createdAt.toJson(),
     };
   }
@@ -87,12 +94,14 @@ class _UserImpl extends User {
     required String fullName,
     required String email,
     required String passwordHash,
+    required String role,
     required DateTime createdAt,
   }) : super._(
           id: id,
           fullName: fullName,
           email: email,
           passwordHash: passwordHash,
+          role: role,
           createdAt: createdAt,
         );
 
@@ -105,6 +114,7 @@ class _UserImpl extends User {
     String? fullName,
     String? email,
     String? passwordHash,
+    String? role,
     DateTime? createdAt,
   }) {
     return User(
@@ -112,6 +122,7 @@ class _UserImpl extends User {
       fullName: fullName ?? this.fullName,
       email: email ?? this.email,
       passwordHash: passwordHash ?? this.passwordHash,
+      role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,
     );
   }

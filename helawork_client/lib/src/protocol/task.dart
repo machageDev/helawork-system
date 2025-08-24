@@ -14,35 +14,35 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 abstract class Task implements _i1.SerializableModel {
   Task._({
     this.id,
+    required this.employerId,
     required this.title,
-    required this.description,
-    required this.deadline,
+    this.description,
     required this.status,
     required this.createdAt,
-    required this.assignedTo,
+    required this.updatedAt,
   });
 
   factory Task({
     int? id,
+    required int employerId,
     required String title,
-    required String description,
-    required DateTime deadline,
+    String? description,
     required String status,
     required DateTime createdAt,
-    required int assignedTo,
+    required DateTime updatedAt,
   }) = _TaskImpl;
 
   factory Task.fromJson(Map<String, dynamic> jsonSerialization) {
     return Task(
       id: jsonSerialization['id'] as int?,
+      employerId: jsonSerialization['employerId'] as int,
       title: jsonSerialization['title'] as String,
-      description: jsonSerialization['description'] as String,
-      deadline:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['deadline']),
+      description: jsonSerialization['description'] as String?,
       status: jsonSerialization['status'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
-      assignedTo: jsonSerialization['assignedTo'] as int,
+      updatedAt:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -51,40 +51,40 @@ abstract class Task implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
+  int employerId;
+
   String title;
 
-  String description;
-
-  DateTime deadline;
+  String? description;
 
   String status;
 
   DateTime createdAt;
 
-  int assignedTo;
+  DateTime updatedAt;
 
   /// Returns a shallow copy of this [Task]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   Task copyWith({
     int? id,
+    int? employerId,
     String? title,
     String? description,
-    DateTime? deadline,
     String? status,
     DateTime? createdAt,
-    int? assignedTo,
+    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
+      'employerId': employerId,
       'title': title,
-      'description': description,
-      'deadline': deadline.toJson(),
+      if (description != null) 'description': description,
       'status': status,
       'createdAt': createdAt.toJson(),
-      'assignedTo': assignedTo,
+      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -99,20 +99,20 @@ class _Undefined {}
 class _TaskImpl extends Task {
   _TaskImpl({
     int? id,
+    required int employerId,
     required String title,
-    required String description,
-    required DateTime deadline,
+    String? description,
     required String status,
     required DateTime createdAt,
-    required int assignedTo,
+    required DateTime updatedAt,
   }) : super._(
           id: id,
+          employerId: employerId,
           title: title,
           description: description,
-          deadline: deadline,
           status: status,
           createdAt: createdAt,
-          assignedTo: assignedTo,
+          updatedAt: updatedAt,
         );
 
   /// Returns a shallow copy of this [Task]
@@ -121,21 +121,21 @@ class _TaskImpl extends Task {
   @override
   Task copyWith({
     Object? id = _Undefined,
+    int? employerId,
     String? title,
-    String? description,
-    DateTime? deadline,
+    Object? description = _Undefined,
     String? status,
     DateTime? createdAt,
-    int? assignedTo,
+    DateTime? updatedAt,
   }) {
     return Task(
       id: id is int? ? id : this.id,
+      employerId: employerId ?? this.employerId,
       title: title ?? this.title,
-      description: description ?? this.description,
-      deadline: deadline ?? this.deadline,
+      description: description is String? ? description : this.description,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
-      assignedTo: assignedTo ?? this.assignedTo,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

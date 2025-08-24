@@ -10,16 +10,15 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'greeting.dart' as _i2;
+import 'mpesa_payment.dart' as _i2;
 import 'payment.dart' as _i3;
-import 'task.dart' as _i4;
-import 'time_log.dart' as _i5;
-import 'user.dart' as _i6;
-import 'package:helawork_client/src/protocol/payment.dart' as _i7;
-import 'package:helawork_client/src/protocol/task.dart' as _i8;
-import 'package:helawork_client/src/protocol/time_log.dart' as _i9;
-export 'greeting.dart';
+import 'reset_token.dart' as _i4;
+import 'task.dart' as _i5;
+import 'time_log.dart' as _i6;
+import 'user.dart' as _i7;
+export 'mpesa_payment.dart';
 export 'payment.dart';
+export 'reset_token.dart';
 export 'task.dart';
 export 'time_log.dart';
 export 'user.dart';
@@ -38,46 +37,41 @@ class Protocol extends _i1.SerializationManager {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i2.Greeting) {
-      return _i2.Greeting.fromJson(data) as T;
+    if (t == _i2.MpesaTransaction) {
+      return _i2.MpesaTransaction.fromJson(data) as T;
     }
-    if (t == _i3.Payment) {
-      return _i3.Payment.fromJson(data) as T;
+    if (t == _i3.PaymentRate) {
+      return _i3.PaymentRate.fromJson(data) as T;
     }
-    if (t == _i4.Task) {
-      return _i4.Task.fromJson(data) as T;
+    if (t == _i4.ResetToken) {
+      return _i4.ResetToken.fromJson(data) as T;
     }
-    if (t == _i5.TimeLog) {
-      return _i5.TimeLog.fromJson(data) as T;
+    if (t == _i5.Task) {
+      return _i5.Task.fromJson(data) as T;
     }
-    if (t == _i6.User) {
-      return _i6.User.fromJson(data) as T;
+    if (t == _i6.TimeLog) {
+      return _i6.TimeLog.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i2.Greeting?>()) {
-      return (data != null ? _i2.Greeting.fromJson(data) : null) as T;
+    if (t == _i7.User) {
+      return _i7.User.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i3.Payment?>()) {
-      return (data != null ? _i3.Payment.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i2.MpesaTransaction?>()) {
+      return (data != null ? _i2.MpesaTransaction.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i4.Task?>()) {
-      return (data != null ? _i4.Task.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i3.PaymentRate?>()) {
+      return (data != null ? _i3.PaymentRate.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.TimeLog?>()) {
-      return (data != null ? _i5.TimeLog.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.ResetToken?>()) {
+      return (data != null ? _i4.ResetToken.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.User?>()) {
-      return (data != null ? _i6.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Task?>()) {
+      return (data != null ? _i5.Task.fromJson(data) : null) as T;
     }
-    if (t == List<_i7.Payment>) {
-      return (data as List).map((e) => deserialize<_i7.Payment>(e)).toList()
-          as T;
+    if (t == _i1.getType<_i6.TimeLog?>()) {
+      return (data != null ? _i6.TimeLog.fromJson(data) : null) as T;
     }
-    if (t == List<_i8.Task>) {
-      return (data as List).map((e) => deserialize<_i8.Task>(e)).toList() as T;
-    }
-    if (t == List<_i9.TimeLog>) {
-      return (data as List).map((e) => deserialize<_i9.TimeLog>(e)).toList()
-          as T;
+    if (t == _i1.getType<_i7.User?>()) {
+      return (data != null ? _i7.User.fromJson(data) : null) as T;
     }
     return super.deserialize<T>(data, t);
   }
@@ -86,19 +80,22 @@ class Protocol extends _i1.SerializationManager {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i2.Greeting) {
-      return 'Greeting';
+    if (data is _i2.MpesaTransaction) {
+      return 'MpesaTransaction';
     }
-    if (data is _i3.Payment) {
-      return 'Payment';
+    if (data is _i3.PaymentRate) {
+      return 'PaymentRate';
     }
-    if (data is _i4.Task) {
+    if (data is _i4.ResetToken) {
+      return 'ResetToken';
+    }
+    if (data is _i5.Task) {
       return 'Task';
     }
-    if (data is _i5.TimeLog) {
+    if (data is _i6.TimeLog) {
       return 'TimeLog';
     }
-    if (data is _i6.User) {
+    if (data is _i7.User) {
       return 'User';
     }
     return null;
@@ -110,20 +107,23 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName is! String) {
       return super.deserializeByClassName(data);
     }
-    if (dataClassName == 'Greeting') {
-      return deserialize<_i2.Greeting>(data['data']);
+    if (dataClassName == 'MpesaTransaction') {
+      return deserialize<_i2.MpesaTransaction>(data['data']);
     }
-    if (dataClassName == 'Payment') {
-      return deserialize<_i3.Payment>(data['data']);
+    if (dataClassName == 'PaymentRate') {
+      return deserialize<_i3.PaymentRate>(data['data']);
+    }
+    if (dataClassName == 'ResetToken') {
+      return deserialize<_i4.ResetToken>(data['data']);
     }
     if (dataClassName == 'Task') {
-      return deserialize<_i4.Task>(data['data']);
+      return deserialize<_i5.Task>(data['data']);
     }
     if (dataClassName == 'TimeLog') {
-      return deserialize<_i5.TimeLog>(data['data']);
+      return deserialize<_i6.TimeLog>(data['data']);
     }
     if (dataClassName == 'User') {
-      return deserialize<_i6.User>(data['data']);
+      return deserialize<_i7.User>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

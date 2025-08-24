@@ -14,35 +14,35 @@ import 'package:serverpod/serverpod.dart' as _i1;
 abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Task._({
     this.id,
+    required this.employerId,
     required this.title,
-    required this.description,
-    required this.deadline,
+    this.description,
     required this.status,
     required this.createdAt,
-    required this.assignedTo,
+    required this.updatedAt,
   });
 
   factory Task({
     int? id,
+    required int employerId,
     required String title,
-    required String description,
-    required DateTime deadline,
+    String? description,
     required String status,
     required DateTime createdAt,
-    required int assignedTo,
+    required DateTime updatedAt,
   }) = _TaskImpl;
 
   factory Task.fromJson(Map<String, dynamic> jsonSerialization) {
     return Task(
       id: jsonSerialization['id'] as int?,
+      employerId: jsonSerialization['employerId'] as int,
       title: jsonSerialization['title'] as String,
-      description: jsonSerialization['description'] as String,
-      deadline:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['deadline']),
+      description: jsonSerialization['description'] as String?,
       status: jsonSerialization['status'] as String,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
-      assignedTo: jsonSerialization['assignedTo'] as int,
+      updatedAt:
+          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -53,17 +53,17 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @override
   int? id;
 
+  int employerId;
+
   String title;
 
-  String description;
-
-  DateTime deadline;
+  String? description;
 
   String status;
 
   DateTime createdAt;
 
-  int assignedTo;
+  DateTime updatedAt;
 
   @override
   _i1.Table<int?> get table => t;
@@ -73,23 +73,23 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @_i1.useResult
   Task copyWith({
     int? id,
+    int? employerId,
     String? title,
     String? description,
-    DateTime? deadline,
     String? status,
     DateTime? createdAt,
-    int? assignedTo,
+    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
+      'employerId': employerId,
       'title': title,
-      'description': description,
-      'deadline': deadline.toJson(),
+      if (description != null) 'description': description,
       'status': status,
       'createdAt': createdAt.toJson(),
-      'assignedTo': assignedTo,
+      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -97,12 +97,12 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
+      'employerId': employerId,
       'title': title,
-      'description': description,
-      'deadline': deadline.toJson(),
+      if (description != null) 'description': description,
       'status': status,
       'createdAt': createdAt.toJson(),
-      'assignedTo': assignedTo,
+      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -141,20 +141,20 @@ class _Undefined {}
 class _TaskImpl extends Task {
   _TaskImpl({
     int? id,
+    required int employerId,
     required String title,
-    required String description,
-    required DateTime deadline,
+    String? description,
     required String status,
     required DateTime createdAt,
-    required int assignedTo,
+    required DateTime updatedAt,
   }) : super._(
           id: id,
+          employerId: employerId,
           title: title,
           description: description,
-          deadline: deadline,
           status: status,
           createdAt: createdAt,
-          assignedTo: assignedTo,
+          updatedAt: updatedAt,
         );
 
   /// Returns a shallow copy of this [Task]
@@ -163,37 +163,37 @@ class _TaskImpl extends Task {
   @override
   Task copyWith({
     Object? id = _Undefined,
+    int? employerId,
     String? title,
-    String? description,
-    DateTime? deadline,
+    Object? description = _Undefined,
     String? status,
     DateTime? createdAt,
-    int? assignedTo,
+    DateTime? updatedAt,
   }) {
     return Task(
       id: id is int? ? id : this.id,
+      employerId: employerId ?? this.employerId,
       title: title ?? this.title,
-      description: description ?? this.description,
-      deadline: deadline ?? this.deadline,
+      description: description is String? ? description : this.description,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
-      assignedTo: assignedTo ?? this.assignedTo,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
 
 class TaskTable extends _i1.Table<int?> {
   TaskTable({super.tableRelation}) : super(tableName: 'task') {
+    employerId = _i1.ColumnInt(
+      'employerId',
+      this,
+    );
     title = _i1.ColumnString(
       'title',
       this,
     );
     description = _i1.ColumnString(
       'description',
-      this,
-    );
-    deadline = _i1.ColumnDateTime(
-      'deadline',
       this,
     );
     status = _i1.ColumnString(
@@ -204,33 +204,33 @@ class TaskTable extends _i1.Table<int?> {
       'createdAt',
       this,
     );
-    assignedTo = _i1.ColumnInt(
-      'assignedTo',
+    updatedAt = _i1.ColumnDateTime(
+      'updatedAt',
       this,
     );
   }
+
+  late final _i1.ColumnInt employerId;
 
   late final _i1.ColumnString title;
 
   late final _i1.ColumnString description;
 
-  late final _i1.ColumnDateTime deadline;
-
   late final _i1.ColumnString status;
 
   late final _i1.ColumnDateTime createdAt;
 
-  late final _i1.ColumnInt assignedTo;
+  late final _i1.ColumnDateTime updatedAt;
 
   @override
   List<_i1.Column> get columns => [
         id,
+        employerId,
         title,
         description,
-        deadline,
         status,
         createdAt,
-        assignedTo,
+        updatedAt,
       ];
 }
 

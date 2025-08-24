@@ -11,38 +11,39 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
-abstract class Payment implements _i1.SerializableModel {
-  Payment._({
+abstract class PaymentRate implements _i1.SerializableModel {
+  PaymentRate._({
     this.id,
-    this.userId,
-    required this.totalHours,
+    required this.workerId,
+    required this.employerId,
     required this.ratePerHour,
-    required this.totalAmount,
-    required this.paymentMethod,
-    required this.status,
+    required this.effectiveFrom,
+    this.effectiveTo,
     required this.createdAt,
   });
 
-  factory Payment({
+  factory PaymentRate({
     int? id,
-    int? userId,
-    required double totalHours,
+    required int workerId,
+    required int employerId,
     required double ratePerHour,
-    required double totalAmount,
-    required String paymentMethod,
-    required String status,
+    required DateTime effectiveFrom,
+    DateTime? effectiveTo,
     required DateTime createdAt,
-  }) = _PaymentImpl;
+  }) = _PaymentRateImpl;
 
-  factory Payment.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Payment(
+  factory PaymentRate.fromJson(Map<String, dynamic> jsonSerialization) {
+    return PaymentRate(
       id: jsonSerialization['id'] as int?,
-      userId: jsonSerialization['userId'] as int?,
-      totalHours: (jsonSerialization['totalHours'] as num).toDouble(),
+      workerId: jsonSerialization['workerId'] as int,
+      employerId: jsonSerialization['employerId'] as int,
       ratePerHour: (jsonSerialization['ratePerHour'] as num).toDouble(),
-      totalAmount: (jsonSerialization['totalAmount'] as num).toDouble(),
-      paymentMethod: jsonSerialization['paymentMethod'] as String,
-      status: jsonSerialization['status'] as String,
+      effectiveFrom: _i1.DateTimeJsonExtension.fromJson(
+          jsonSerialization['effectiveFrom']),
+      effectiveTo: jsonSerialization['effectiveTo'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['effectiveTo']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
@@ -53,43 +54,39 @@ abstract class Payment implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  int? userId;
+  int workerId;
 
-  double totalHours;
+  int employerId;
 
   double ratePerHour;
 
-  double totalAmount;
+  DateTime effectiveFrom;
 
-  String paymentMethod;
-
-  String status;
+  DateTime? effectiveTo;
 
   DateTime createdAt;
 
-  /// Returns a shallow copy of this [Payment]
+  /// Returns a shallow copy of this [PaymentRate]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
-  Payment copyWith({
+  PaymentRate copyWith({
     int? id,
-    int? userId,
-    double? totalHours,
+    int? workerId,
+    int? employerId,
     double? ratePerHour,
-    double? totalAmount,
-    String? paymentMethod,
-    String? status,
+    DateTime? effectiveFrom,
+    DateTime? effectiveTo,
     DateTime? createdAt,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      if (userId != null) 'userId': userId,
-      'totalHours': totalHours,
+      'workerId': workerId,
+      'employerId': employerId,
       'ratePerHour': ratePerHour,
-      'totalAmount': totalAmount,
-      'paymentMethod': paymentMethod,
-      'status': status,
+      'effectiveFrom': effectiveFrom.toJson(),
+      if (effectiveTo != null) 'effectiveTo': effectiveTo?.toJson(),
       'createdAt': createdAt.toJson(),
     };
   }
@@ -102,49 +99,45 @@ abstract class Payment implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _PaymentImpl extends Payment {
-  _PaymentImpl({
+class _PaymentRateImpl extends PaymentRate {
+  _PaymentRateImpl({
     int? id,
-    int? userId,
-    required double totalHours,
+    required int workerId,
+    required int employerId,
     required double ratePerHour,
-    required double totalAmount,
-    required String paymentMethod,
-    required String status,
+    required DateTime effectiveFrom,
+    DateTime? effectiveTo,
     required DateTime createdAt,
   }) : super._(
           id: id,
-          userId: userId,
-          totalHours: totalHours,
+          workerId: workerId,
+          employerId: employerId,
           ratePerHour: ratePerHour,
-          totalAmount: totalAmount,
-          paymentMethod: paymentMethod,
-          status: status,
+          effectiveFrom: effectiveFrom,
+          effectiveTo: effectiveTo,
           createdAt: createdAt,
         );
 
-  /// Returns a shallow copy of this [Payment]
+  /// Returns a shallow copy of this [PaymentRate]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   @override
-  Payment copyWith({
+  PaymentRate copyWith({
     Object? id = _Undefined,
-    Object? userId = _Undefined,
-    double? totalHours,
+    int? workerId,
+    int? employerId,
     double? ratePerHour,
-    double? totalAmount,
-    String? paymentMethod,
-    String? status,
+    DateTime? effectiveFrom,
+    Object? effectiveTo = _Undefined,
     DateTime? createdAt,
   }) {
-    return Payment(
+    return PaymentRate(
       id: id is int? ? id : this.id,
-      userId: userId is int? ? userId : this.userId,
-      totalHours: totalHours ?? this.totalHours,
+      workerId: workerId ?? this.workerId,
+      employerId: employerId ?? this.employerId,
       ratePerHour: ratePerHour ?? this.ratePerHour,
-      totalAmount: totalAmount ?? this.totalAmount,
-      paymentMethod: paymentMethod ?? this.paymentMethod,
-      status: status ?? this.status,
+      effectiveFrom: effectiveFrom ?? this.effectiveFrom,
+      effectiveTo: effectiveTo is DateTime? ? effectiveTo : this.effectiveTo,
       createdAt: createdAt ?? this.createdAt,
     );
   }

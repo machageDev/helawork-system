@@ -1,0 +1,7 @@
+class: ResetToken
+table: reset_token
+fields:
+  id: int?
+  userId: int, relation(parent=user)
+  token: String
+  expiresAt: DateTime
