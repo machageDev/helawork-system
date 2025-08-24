@@ -21,7 +21,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     required this.status,
     required this.deadline,
     required this.createdAt,
-    required this.updatedAt,
   });
 
   factory Task({
@@ -33,7 +32,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     required String status,
     required DateTime deadline,
     required DateTime createdAt,
-    required DateTime updatedAt,
   }) = _TaskImpl;
 
   factory Task.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -48,8 +46,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['deadline']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
-      updatedAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -74,8 +70,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   DateTime createdAt;
 
-  DateTime updatedAt;
-
   @override
   _i1.Table<int?> get table => t;
 
@@ -91,7 +85,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     String? status,
     DateTime? deadline,
     DateTime? createdAt,
-    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -104,7 +97,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       'status': status,
       'deadline': deadline.toJson(),
       'createdAt': createdAt.toJson(),
-      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -119,7 +111,6 @@ abstract class Task implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       'status': status,
       'deadline': deadline.toJson(),
       'createdAt': createdAt.toJson(),
-      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -165,7 +156,6 @@ class _TaskImpl extends Task {
     required String status,
     required DateTime deadline,
     required DateTime createdAt,
-    required DateTime updatedAt,
   }) : super._(
           id: id,
           employerId: employerId,
@@ -175,7 +165,6 @@ class _TaskImpl extends Task {
           status: status,
           deadline: deadline,
           createdAt: createdAt,
-          updatedAt: updatedAt,
         );
 
   /// Returns a shallow copy of this [Task]
@@ -191,7 +180,6 @@ class _TaskImpl extends Task {
     String? status,
     DateTime? deadline,
     DateTime? createdAt,
-    DateTime? updatedAt,
   }) {
     return Task(
       id: id is int? ? id : this.id,
@@ -202,7 +190,6 @@ class _TaskImpl extends Task {
       status: status ?? this.status,
       deadline: deadline ?? this.deadline,
       createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
@@ -237,10 +224,6 @@ class TaskTable extends _i1.Table<int?> {
       'createdAt',
       this,
     );
-    updatedAt = _i1.ColumnDateTime(
-      'updatedAt',
-      this,
-    );
   }
 
   late final _i1.ColumnInt employerId;
@@ -257,8 +240,6 @@ class TaskTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime createdAt;
 
-  late final _i1.ColumnDateTime updatedAt;
-
   @override
   List<_i1.Column> get columns => [
         id,
@@ -269,7 +250,6 @@ class TaskTable extends _i1.Table<int?> {
         status,
         deadline,
         createdAt,
-        updatedAt,
       ];
 }
 

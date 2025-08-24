@@ -3,3 +3,13 @@ auth:
   - login:
   - forgotPassword:
   - resetPassword:
+task:
+  - createTask:
+  - assignTask:
+  - updateTaskStatus:
+  - getTasksForEmployer:
+  - getTasksForWorker:
+timeLog:
+  - startLog:
+  - stopLog:
+  - getLogsForWorker:

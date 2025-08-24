@@ -12,7 +12,9 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:helawork_client/src/protocol/user.dart' as _i3;
-import 'protocol.dart' as _i4;
+import 'package:helawork_client/src/protocol/task.dart' as _i4;
+import 'package:helawork_client/src/protocol/time_log.dart' as _i5;
+import 'protocol.dart' as _i6;
 
 /// {@category Endpoint}
 class EndpointAuth extends _i1.EndpointRef {
@@ -72,6 +74,106 @@ class EndpointAuth extends _i1.EndpointRef {
       );
 }
 
+/// {@category Endpoint}
+class EndpointTask extends _i1.EndpointRef {
+  EndpointTask(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'task';
+
+  _i2.Future<_i4.Task> createTask(
+    int employerId,
+    String title,
+    String description,
+    DateTime deadline,
+  ) =>
+      caller.callServerEndpoint<_i4.Task>(
+        'task',
+        'createTask',
+        {
+          'employerId': employerId,
+          'title': title,
+          'description': description,
+          'deadline': deadline,
+        },
+      );
+
+  _i2.Future<_i4.Task?> assignTask(
+    int taskId,
+    int workerId,
+  ) =>
+      caller.callServerEndpoint<_i4.Task?>(
+        'task',
+        'assignTask',
+        {
+          'taskId': taskId,
+          'workerId': workerId,
+        },
+      );
+
+  _i2.Future<_i4.Task?> updateTaskStatus(
+    int taskId,
+    String status,
+  ) =>
+      caller.callServerEndpoint<_i4.Task?>(
+        'task',
+        'updateTaskStatus',
+        {
+          'taskId': taskId,
+          'status': status,
+        },
+      );
+
+  _i2.Future<List<_i4.Task>> getTasksForEmployer(int employerId) =>
+      caller.callServerEndpoint<List<_i4.Task>>(
+        'task',
+        'getTasksForEmployer',
+        {'employerId': employerId},
+      );
+
+  _i2.Future<List<_i4.Task>> getTasksForWorker(int workerId) =>
+      caller.callServerEndpoint<List<_i4.Task>>(
+        'task',
+        'getTasksForWorker',
+        {'workerId': workerId},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointTimeLog extends _i1.EndpointRef {
+  EndpointTimeLog(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'timeLog';
+
+  _i2.Future<_i5.TimeLog> startLog(
+    int workerId,
+    int taskId,
+  ) =>
+      caller.callServerEndpoint<_i5.TimeLog>(
+        'timeLog',
+        'startLog',
+        {
+          'workerId': workerId,
+          'taskId': taskId,
+        },
+      );
+
+  _i2.Future<_i5.TimeLog?> stopLog(int logId) =>
+      caller.callServerEndpoint<_i5.TimeLog?>(
+        'timeLog',
+        'stopLog',
+        {'logId': logId},
+      );
+
+  _i2.Future<List<_i5.TimeLog>> getLogsForWorker(int workerId) =>
+      caller.callServerEndpoint<List<_i5.TimeLog>>(
+        'timeLog',
+        'getLogsForWorker',
+        {'workerId': workerId},
+      );
+}
+
 class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
@@ -88,7 +190,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i4.Protocol(),
+          _i6.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -99,12 +201,22 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     auth = EndpointAuth(this);
+    task = EndpointTask(this);
+    timeLog = EndpointTimeLog(this);
   }
 
   late final EndpointAuth auth;
 
+  late final EndpointTask task;
+
+  late final EndpointTimeLog timeLog;
+
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {'auth': auth};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'auth': auth,
+        'task': task,
+        'timeLog': timeLog,
+      };
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};

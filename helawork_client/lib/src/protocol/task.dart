@@ -21,7 +21,6 @@ abstract class Task implements _i1.SerializableModel {
     required this.status,
     required this.deadline,
     required this.createdAt,
-    required this.updatedAt,
   });
 
   factory Task({
@@ -33,7 +32,6 @@ abstract class Task implements _i1.SerializableModel {
     required String status,
     required DateTime deadline,
     required DateTime createdAt,
-    required DateTime updatedAt,
   }) = _TaskImpl;
 
   factory Task.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -48,8 +46,6 @@ abstract class Task implements _i1.SerializableModel {
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['deadline']),
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
-      updatedAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -72,8 +68,6 @@ abstract class Task implements _i1.SerializableModel {
 
   DateTime createdAt;
 
-  DateTime updatedAt;
-
   /// Returns a shallow copy of this [Task]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -86,7 +80,6 @@ abstract class Task implements _i1.SerializableModel {
     String? status,
     DateTime? deadline,
     DateTime? createdAt,
-    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -99,7 +92,6 @@ abstract class Task implements _i1.SerializableModel {
       'status': status,
       'deadline': deadline.toJson(),
       'createdAt': createdAt.toJson(),
-      'updatedAt': updatedAt.toJson(),
     };
   }
 
@@ -121,7 +113,6 @@ class _TaskImpl extends Task {
     required String status,
     required DateTime deadline,
     required DateTime createdAt,
-    required DateTime updatedAt,
   }) : super._(
           id: id,
           employerId: employerId,
@@ -131,7 +122,6 @@ class _TaskImpl extends Task {
           status: status,
           deadline: deadline,
           createdAt: createdAt,
-          updatedAt: updatedAt,
         );
 
   /// Returns a shallow copy of this [Task]
@@ -147,7 +137,6 @@ class _TaskImpl extends Task {
     String? status,
     DateTime? deadline,
     DateTime? createdAt,
-    DateTime? updatedAt,
   }) {
     return Task(
       id: id is int? ? id : this.id,
@@ -158,7 +147,6 @@ class _TaskImpl extends Task {
       status: status ?? this.status,
       deadline: deadline ?? this.deadline,
       createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

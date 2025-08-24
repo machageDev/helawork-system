@@ -11,6 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/auth_endpoint.dart' as _i2;
+import '../endpoints/task_endpoint.dart' as _i3;
+import '../endpoints/time_log_endpoint.dart' as _i4;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -21,7 +23,19 @@ class Endpoints extends _i1.EndpointDispatch {
           server,
           'auth',
           null,
-        )
+        ),
+      'task': _i3.TaskEndpoint()
+        ..initialize(
+          server,
+          'task',
+          null,
+        ),
+      'timeLog': _i4.TimeLogEndpoint()
+        ..initialize(
+          server,
+          'timeLog',
+          null,
+        ),
     };
     connectors['auth'] = _i1.EndpointConnector(
       name: 'auth',
@@ -127,6 +141,198 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['token'],
             params['newPassword'],
+          ),
+        ),
+      },
+    );
+    connectors['task'] = _i1.EndpointConnector(
+      name: 'task',
+      endpoint: endpoints['task']!,
+      methodConnectors: {
+        'createTask': _i1.MethodConnector(
+          name: 'createTask',
+          params: {
+            'employerId': _i1.ParameterDescription(
+              name: 'employerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'title': _i1.ParameterDescription(
+              name: 'title',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'description': _i1.ParameterDescription(
+              name: 'description',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'deadline': _i1.ParameterDescription(
+              name: 'deadline',
+              type: _i1.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['task'] as _i3.TaskEndpoint).createTask(
+            session,
+            params['employerId'],
+            params['title'],
+            params['description'],
+            params['deadline'],
+          ),
+        ),
+        'assignTask': _i1.MethodConnector(
+          name: 'assignTask',
+          params: {
+            'taskId': _i1.ParameterDescription(
+              name: 'taskId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['task'] as _i3.TaskEndpoint).assignTask(
+            session,
+            params['taskId'],
+            params['workerId'],
+          ),
+        ),
+        'updateTaskStatus': _i1.MethodConnector(
+          name: 'updateTaskStatus',
+          params: {
+            'taskId': _i1.ParameterDescription(
+              name: 'taskId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'status': _i1.ParameterDescription(
+              name: 'status',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['task'] as _i3.TaskEndpoint).updateTaskStatus(
+            session,
+            params['taskId'],
+            params['status'],
+          ),
+        ),
+        'getTasksForEmployer': _i1.MethodConnector(
+          name: 'getTasksForEmployer',
+          params: {
+            'employerId': _i1.ParameterDescription(
+              name: 'employerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['task'] as _i3.TaskEndpoint).getTasksForEmployer(
+            session,
+            params['employerId'],
+          ),
+        ),
+        'getTasksForWorker': _i1.MethodConnector(
+          name: 'getTasksForWorker',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['task'] as _i3.TaskEndpoint).getTasksForWorker(
+            session,
+            params['workerId'],
+          ),
+        ),
+      },
+    );
+    connectors['timeLog'] = _i1.EndpointConnector(
+      name: 'timeLog',
+      endpoint: endpoints['timeLog']!,
+      methodConnectors: {
+        'startLog': _i1.MethodConnector(
+          name: 'startLog',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'taskId': _i1.ParameterDescription(
+              name: 'taskId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i4.TimeLogEndpoint).startLog(
+            session,
+            params['workerId'],
+            params['taskId'],
+          ),
+        ),
+        'stopLog': _i1.MethodConnector(
+          name: 'stopLog',
+          params: {
+            'logId': _i1.ParameterDescription(
+              name: 'logId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i4.TimeLogEndpoint).stopLog(
+            session,
+            params['logId'],
+          ),
+        ),
+        'getLogsForWorker': _i1.MethodConnector(
+          name: 'getLogsForWorker',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i4.TimeLogEndpoint).getLogsForWorker(
+            session,
+            params['workerId'],
           ),
         ),
       },

@@ -8,4 +8,4 @@ fields:
   status: String
   deadline: DateTime
   createdAt: DateTime
-  updatedAt: DateTime
+  

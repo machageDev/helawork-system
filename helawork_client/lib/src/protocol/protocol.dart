@@ -16,6 +16,8 @@ import 'reset_token.dart' as _i4;
 import 'task.dart' as _i5;
 import 'time_log.dart' as _i6;
 import 'user.dart' as _i7;
+import 'package:helawork_client/src/protocol/task.dart' as _i8;
+import 'package:helawork_client/src/protocol/time_log.dart' as _i9;
 export 'mpesa_payment.dart';
 export 'payment.dart';
 export 'reset_token.dart';
@@ -72,6 +74,13 @@ class Protocol extends _i1.SerializationManager {
     }
     if (t == _i1.getType<_i7.User?>()) {
       return (data != null ? _i7.User.fromJson(data) : null) as T;
+    }
+    if (t == List<_i8.Task>) {
+      return (data as List).map((e) => deserialize<_i8.Task>(e)).toList() as T;
+    }
+    if (t == List<_i9.TimeLog>) {
+      return (data as List).map((e) => deserialize<_i9.TimeLog>(e)).toList()
+          as T;
     }
     return super.deserialize<T>(data, t);
   }
