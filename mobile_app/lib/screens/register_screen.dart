@@ -1,87 +1,49 @@
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:helawork_client/helawork_client.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   final Client client;
   
-  const LoginScreen({super.key, required this.client});
+  const RegisterScreen({super.key, required this.client});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   
   bool _isLoading = false;
   bool _obscurePassword = true;
-  bool _rememberMe = false;
+  bool _obscureConfirmPassword = true;
   String? _errorMessage;
+  String? _selectedRole;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedCredentials();
-    _logAnalyticsEvent('login_screen_viewed');
-  }
+  // Role options - adjust based on your application needs
+  final List<String> _roleOptions = ['employee', 'manager', 'admin'];
 
-  // Load saved email and remember me preference
-  Future<void> _loadSavedCredentials() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      setState(() {
-        _rememberMe = prefs.getBool('rememberMe') ?? false;
-        if (_rememberMe) {
-          _emailController.text = prefs.getString('savedEmail') ?? '';
-        }
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error loading saved credentials: $e');
-      }
-    }
-  }
-
-  // Save email and remember me preference
-  Future<void> _saveCredentials() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      if (_rememberMe) {
-        await prefs.setString('savedEmail', _emailController.text.trim());
-        await prefs.setBool('rememberMe', true);
-      } else {
-        await prefs.remove('savedEmail');
-        await prefs.setBool('rememberMe', false);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error saving credentials: $e');
-      }
-    }
-  }
-
-  // Analytics event logging
-  void _logAnalyticsEvent(String eventName, [Map<String, dynamic>? parameters]) {
-    // Implement your analytics service here
-    if (kDebugMode) {
-      print('Analytics Event: $eventName, Params: $parameters');
-    }
-    // Example: FirebaseAnalytics.instance.logEvent(name: eventName, parameters: parameters);
-  }
-
-  Future<void> _login() async {
+  Future<void> _register() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    _logAnalyticsEvent('login_attempted', {
-      'email': _emailController.text.trim(),
-    });
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        _errorMessage = 'Passwords do not match';
+      });
+      return;
+    }
+
+    if (_selectedRole == null) {
+      setState(() {
+        _errorMessage = 'Please select a role';
+      });
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -89,39 +51,31 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final user = await widget.client.auth.login(
+      final user = await widget.client.auth.register(
+        _fullNameController.text.trim(),
         _emailController.text.trim(),
         _passwordController.text.trim(),
+        _selectedRole!,
       );
 
       if (user != null) {
-        await _saveCredentials();
-        
-        _logAnalyticsEvent('login_success', {
-          'user_id': user.id,
-          'email': user.email,
-          'role': user.role,
-        });
-
         if (mounted) {
-          Navigator.pushReplacementNamed(context, '/dashboard');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful! Please login.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context); // Go back to login screen
         }
       } else {
         setState(() {
-          _errorMessage = 'Invalid email or password';
-        });
-        _logAnalyticsEvent('login_failed', {
-          'reason': 'invalid_credentials',
-          'email': _emailController.text.trim(),
+          _errorMessage = 'Registration failed. Please try again.';
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Login failed. Please check your credentials and try again.';
-      });
-      _logAnalyticsEvent('login_error', {
-        'error': e.toString(),
-        'email': _emailController.text.trim(),
+        _errorMessage = 'Registration failed: ${e.toString().replaceFirst('Exception: ', '')}';
       });
     } finally {
       if (mounted) {
@@ -134,8 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -143,6 +99,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black87,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -151,21 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Company Logo - Replace with your actual logo asset
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.work_outline,
-                    size: 40,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 20),
                 const Text(
                   "HelaWork",
                   style: TextStyle(
@@ -176,19 +125,49 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  "Company Portal",
+                  "Create Your Account",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     color: Colors.white70,
                   ),
                 ),
                 const SizedBox(height: 40),
+                // Full Name Field
+                TextFormField(
+                  controller: _fullNameController,
+                  decoration: InputDecoration(
+                    labelText: "Full Name",
+                    labelStyle: const TextStyle(color: Colors.white70),
+                    hintText: "Enter your full name",
+                    hintStyle: const TextStyle(color: Colors.white54),
+                    filled: true,
+                    fillColor: Colors.black26,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                  ),
+                  style: const TextStyle(color: Colors.white),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your full name';
+                    }
+                    if (value.trim().split(' ').length < 2) {
+                      return 'Please enter your full name (first and last)';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                // Email Field
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    labelText: "Company Email",
+                    labelText: "Email",
                     labelStyle: const TextStyle(color: Colors.white70),
+                    hintText: "Enter your email",
+                    hintStyle: const TextStyle(color: Colors.white54),
                     filled: true,
                     fillColor: Colors.black26,
                     border: OutlineInputBorder(
@@ -199,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: const TextStyle(color: Colors.white),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your company email';
+                      return 'Please enter your email';
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                       return 'Please enter a valid email address';
@@ -208,12 +187,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
+                // Password Field
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: "Password",
                     labelStyle: const TextStyle(color: Colors.white70),
+                    hintText: "Enter your password",
+                    hintStyle: const TextStyle(color: Colors.white54),
                     filled: true,
                     fillColor: Colors.black26,
                     border: OutlineInputBorder(
@@ -243,42 +225,81 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _rememberMe,
-                      onChanged: (value) {
+                const SizedBox(height: 20),
+                // Confirm Password Field
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: _obscureConfirmPassword,
+                  decoration: InputDecoration(
+                    labelText: "Confirm Password",
+                    labelStyle: const TextStyle(color: Colors.white70),
+                    hintText: "Confirm your password",
+                    hintStyle: const TextStyle(color: Colors.white54),
+                    filled: true,
+                    fillColor: Colors.black26,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.white70,
+                      ),
+                      onPressed: () {
                         setState(() {
-                          _rememberMe = value ?? false;
+                          _obscureConfirmPassword = !_obscureConfirmPassword;
                         });
                       },
-                      fillColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.selected)) {
-                            return Colors.orange;
-                          }
-                          return Colors.grey;
-                        },
-                      ),
                     ),
-                    const Text(
-                      "Remember me",
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/forgot-password');
-                      },
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                    ),
-                  ],
+                  ),
+                  style: const TextStyle(color: Colors.white),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please confirm your password';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
+                // Role Selection Dropdown
+                DropdownButtonFormField<String>(
+                  value: _selectedRole,
+                  decoration: InputDecoration(
+                    labelText: "Role",
+                    labelStyle: const TextStyle(color: Colors.white70),
+                    filled: true,
+                    fillColor: Colors.black26,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    prefixIcon: const Icon(Icons.work, color: Colors.white70),
+                  ),
+                  dropdownColor: Colors.grey[900],
+                  style: const TextStyle(color: Colors.white),
+                  items: _roleOptions.map((String role) {
+                    return DropdownMenuItem<String>(
+                      value: role,
+                      child: Text(
+                        role[0].toUpperCase() + role.substring(1), // Capitalize first letter
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedRole = newValue;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a role';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                // Error Message
                 if (_errorMessage != null)
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -301,11 +322,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 const SizedBox(height: 20),
+                // Register Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _login,
+                    onPressed: _isLoading ? null : _register,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       foregroundColor: Colors.black,
@@ -323,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           )
                         : const Text(
-                            "Sign In",
+                            "Register",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -332,20 +354,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
+                // Login Redirect
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Need help accessing your account? ",
+                      "Already have an account? ",
                       style: TextStyle(color: Colors.white70),
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigate to help/contact page
-                        Navigator.pushNamed(context, '/support');
+                        Navigator.pop(context);
                       },
                       child: const Text(
-                        "Contact IT",
+                        "Login",
                         style: TextStyle(
                           color: Colors.orange,
                           fontWeight: FontWeight.bold,
@@ -353,19 +375,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 20),
-                // Security notice for company app
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "For security reasons, please ensure you are on a secure network when accessing company resources.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white54,
-                      fontSize: 12,
-                    ),
-                  ),
                 ),
               ],
             ),

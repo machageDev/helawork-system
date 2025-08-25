@@ -5,7 +5,7 @@ import '../generated/protocol.dart';
 import 'dart:math';
 
 class AuthEndpoint extends Endpoint {
-  // 🔹 Register new user
+  //  Register new user
   Future<User?> register(Session session, String fullName, String email, String password, String role) async {
     var existing = await User.db.findFirstRow(
       session,
@@ -30,7 +30,7 @@ class AuthEndpoint extends Endpoint {
     return user;
   }
 
-  // 🔹 Login
+  //  Login
   Future<User?> login(Session session, String email, String password) async {
     var user = await User.db.findFirstRow(
       session,
@@ -47,7 +47,7 @@ class AuthEndpoint extends Endpoint {
     return user;
   }
 
-  // 🔹 Forgot password → generate reset token
+  //  Forgot password → generate reset token
   Future<String> forgotPassword(Session session, String email) async {
     var user = await User.db.findFirstRow(
       session,
@@ -72,7 +72,7 @@ class AuthEndpoint extends Endpoint {
     return token;
   }
 
-  // 🔹 Reset password with token
+  //  Reset password with token
   Future<bool> resetPassword(Session session, String token, String newPassword) async {
     var reset = await ResetToken.db.findFirstRow(
       session,
