@@ -36,6 +36,7 @@ dependencies:
   uuid: ^4.5.1
   shared_preferences: ^2.5.3
   flutter_riverpod: ^2.6.1
+  serverpod_auth_shared_flutter: ^2.9.1
 
 dev_dependencies:
   flutter_lints: '>=3.0.0 <7.0.0'

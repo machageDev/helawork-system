@@ -269,11 +269,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Spacer(),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/forgot-password');
+                        Navigator.pushNamed(context, '/register_screen');
                       },
                       child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Colors.orange),
+                        "Register?",
+                        style: TextStyle(color: Colors.blue),
                       ),
                     ),
                   ],
@@ -338,20 +338,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text(
                       "Need help accessing your account? ",
                       style: TextStyle(color: Colors.white70),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to help/contact page
-                        Navigator.pushNamed(context, '/support');
-                      },
-                      child: const Text(
-                        "Contact IT",
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    ),             
+                     
+                      
+                    
                   ],
                 ),
                 const SizedBox(height: 20),
