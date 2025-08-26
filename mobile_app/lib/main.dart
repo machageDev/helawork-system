@@ -5,7 +5,7 @@ import 'screens/register_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initClient(); // 🔹 Initialize before using client
+  await initClient(); 
   runApp(const MyApp());
 }
 
