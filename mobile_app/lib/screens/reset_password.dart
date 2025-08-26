@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
+class ResetPasswordScreen extends StatelessWidget {
+  final TextEditingController tokenController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
-  ForgotPasswordScreen({super.key});
+  ResetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +33,17 @@ class ForgotPasswordScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               const Text(
-                "Forgot Password",
+                "Reset Password",
                 style: TextStyle(fontSize: 20, color: Colors.white70),
               ),
               const SizedBox(height: 20),
 
-              // Email Input
+              // Token
               TextField(
-                controller: emailController,
+                controller: tokenController,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                  labelText: "Email",
+                  labelText: "Reset Token",
                   labelStyle: const TextStyle(color: Colors.white70),
                   filled: true,
                   fillColor: const Color(0xFF161B22),
@@ -52,12 +54,46 @@ class ForgotPasswordScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Send Reset Link
+              // New Password
+              TextField(
+                controller: newPasswordController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: "New Password",
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: const Color(0xFF161B22),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Confirm Password
+              TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: "Confirm Password",
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: const Color(0xFF161B22),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Reset Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Call forgotPassword endpoint
+                    // TODO: Call resetPassword endpoint
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -66,7 +102,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text("Send Reset Link"),
+                  child: const Text("Reset Password"),
                 ),
               ),
               const SizedBox(height: 20),
