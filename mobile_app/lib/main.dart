@@ -3,10 +3,10 @@ import 'client.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initClient();
-  runApp(MyApp());
+  await initClient(); // 🔹 Initialize before using client
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HelaWork',
+      debugShowCheckedModeBanner: false,
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(client: client),

@@ -3,6 +3,9 @@ auth:
   - login:
   - forgotPassword:
   - resetPassword:
+otp:
+  - generateOtp:
+  - verifyOtp:
 mpesaTransaction:
   - createTransaction:
   - updateTransaction:

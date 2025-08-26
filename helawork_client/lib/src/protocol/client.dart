@@ -77,6 +77,33 @@ class EndpointAuth extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointOtp extends _i1.EndpointRef {
+  EndpointOtp(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'otp';
+
+  _i2.Future<bool> generateOtp(String email) => caller.callServerEndpoint<bool>(
+        'otp',
+        'generateOtp',
+        {'email': email},
+      );
+
+  _i2.Future<bool> verifyOtp(
+    String email,
+    String otp,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'otp',
+        'verifyOtp',
+        {
+          'email': email,
+          'otp': otp,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointMpesaTransaction extends _i1.EndpointRef {
   EndpointMpesaTransaction(_i1.EndpointCaller caller) : super(caller);
 
@@ -321,6 +348,7 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     auth = EndpointAuth(this);
+    otp = EndpointOtp(this);
     mpesaTransaction = EndpointMpesaTransaction(this);
     payment = EndpointPayment(this);
     task = EndpointTask(this);
@@ -328,6 +356,8 @@ class Client extends _i1.ServerpodClientShared {
   }
 
   late final EndpointAuth auth;
+
+  late final EndpointOtp otp;
 
   late final EndpointMpesaTransaction mpesaTransaction;
 
@@ -340,6 +370,7 @@ class Client extends _i1.ServerpodClientShared {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'auth': auth,
+        'otp': otp,
         'mpesaTransaction': mpesaTransaction,
         'payment': payment,
         'task': task,
