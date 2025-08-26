@@ -3,9 +3,8 @@ import 'client.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await initClient(); 
   runApp(const MyApp());
 }
 
