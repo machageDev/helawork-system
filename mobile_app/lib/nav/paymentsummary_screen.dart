@@ -32,8 +32,15 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
 
   Future<void> _loadPaymentSummary() async {
     try {
-      final hours = await widget.client.task.getApprovedHours(workerId: widget.workerId);
-      final rate = await widget.client.payment.getActiveRate(workerId: widget.workerId);
+      // Call endpoint correctly through timeLog
+      final hours = await widget.client.timeLog.getApprovedHours(
+        workerId: widget.workerId,
+      );
+
+      // Call payment endpoint
+      final rate = await widget.client.payment.getActiveRate(
+        workerId: widget.workerId,
+      );
 
       setState(() {
         approvedHours = hours;
@@ -42,7 +49,11 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
         isLoading = false;
       });
     } catch (e) {
+      setState(() => isLoading = false);
       print("Error loading payment summary: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error loading summary: $e")),
+      );
     }
   }
 
@@ -52,9 +63,13 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
         workerId: widget.workerId,
         phoneNumber: widget.phoneNumber,
       );
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response)),
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
     }
   }
 
@@ -68,9 +83,12 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildCard("Approved Hours", approvedHours?.toStringAsFixed(2) ?? "0"),
-                  _buildCard("Hourly Rate", "KES ${hourlyRate?.toStringAsFixed(2) ?? '0'}"),
-                  _buildCard("Total Earnings", "KES ${totalEarnings?.toStringAsFixed(2) ?? '0'}"),
+                  _buildCard("Approved Hours",
+                      approvedHours?.toStringAsFixed(2) ?? "0"),
+                  _buildCard("Hourly Rate",
+                      "KES ${hourlyRate?.toStringAsFixed(2) ?? '0'}"),
+                  _buildCard("Total Earnings",
+                      "KES ${totalEarnings?.toStringAsFixed(2) ?? '0'}"),
                   const Spacer(),
                   ElevatedButton.icon(
                     onPressed: _withdraw,

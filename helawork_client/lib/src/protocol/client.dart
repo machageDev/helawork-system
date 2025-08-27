@@ -14,7 +14,8 @@ import 'dart:async' as _i2;
 import 'package:helawork_client/src/protocol/user.dart' as _i3;
 import 'package:helawork_client/src/protocol/mpesa_payment.dart' as _i4;
 import 'package:helawork_client/src/protocol/payment.dart' as _i5;
-import 'protocol.dart' as _i6;
+import 'package:helawork_client/src/protocol/time_log.dart' as _i6;
+import 'protocol.dart' as _i7;
 
 /// {@category Endpoint}
 class EndpointAuth extends _i1.EndpointRef {
@@ -175,31 +176,16 @@ class EndpointPayment extends _i1.EndpointRef {
   @override
   String get name => 'payment';
 
-  _i2.Future<_i5.PaymentRate> createRate({
-    required int employerId,
+  _i2.Future<String> withdrawPayment({
     required int workerId,
-    required double ratePerHour,
+    required String phoneNumber,
   }) =>
-      caller.callServerEndpoint<_i5.PaymentRate>(
+      caller.callServerEndpoint<String>(
         'payment',
-        'createRate',
+        'withdrawPayment',
         {
-          'employerId': employerId,
           'workerId': workerId,
-          'ratePerHour': ratePerHour,
-        },
-      );
-
-  _i2.Future<_i5.PaymentRate> updateRate({
-    required int rateId,
-    required double newRatePerHour,
-  }) =>
-      caller.callServerEndpoint<_i5.PaymentRate>(
-        'payment',
-        'updateRate',
-        {
-          'rateId': rateId,
-          'newRatePerHour': newRatePerHour,
+          'phoneNumber': phoneNumber,
         },
       );
 
@@ -209,12 +195,70 @@ class EndpointPayment extends _i1.EndpointRef {
         'getActiveRate',
         {'workerId': workerId},
       );
+}
 
-  _i2.Future<List<_i5.PaymentRate>> getRatesForWorker(
-          {required int workerId}) =>
-      caller.callServerEndpoint<List<_i5.PaymentRate>>(
-        'payment',
-        'getRatesForWorker',
+/// {@category Endpoint}
+class EndpointTask extends _i1.EndpointRef {
+  EndpointTask(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'task';
+
+  _i2.Future<_i6.TimeLog> approveTimeLog({required int timeLogId}) =>
+      caller.callServerEndpoint<_i6.TimeLog>(
+        'task',
+        'approveTimeLog',
+        {'timeLogId': timeLogId},
+      );
+
+  _i2.Future<double> getApprovedHours({required int workerId}) =>
+      caller.callServerEndpoint<double>(
+        'task',
+        'getApprovedHours',
+        {'workerId': workerId},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointTimeLog extends _i1.EndpointRef {
+  EndpointTimeLog(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'timeLog';
+
+  _i2.Future<_i6.TimeLog> createLog({
+    required int workerId,
+    required int taskId,
+    required double hoursWorked,
+  }) =>
+      caller.callServerEndpoint<_i6.TimeLog>(
+        'timeLog',
+        'createLog',
+        {
+          'workerId': workerId,
+          'taskId': taskId,
+          'hoursWorked': hoursWorked,
+        },
+      );
+
+  _i2.Future<_i6.TimeLog> approveLog({required int logId}) =>
+      caller.callServerEndpoint<_i6.TimeLog>(
+        'timeLog',
+        'approveLog',
+        {'logId': logId},
+      );
+
+  _i2.Future<List<_i6.TimeLog>> getLogsForWorker({required int workerId}) =>
+      caller.callServerEndpoint<List<_i6.TimeLog>>(
+        'timeLog',
+        'getLogsForWorker',
+        {'workerId': workerId},
+      );
+
+  _i2.Future<double> getApprovedHours({required int workerId}) =>
+      caller.callServerEndpoint<double>(
+        'timeLog',
+        'getApprovedHours',
         {'workerId': workerId},
       );
 }
@@ -235,7 +279,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i6.Protocol(),
+          _i7.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -249,6 +293,8 @@ class Client extends _i1.ServerpodClientShared {
     otp = EndpointOtp(this);
     mpesaTransaction = EndpointMpesaTransaction(this);
     payment = EndpointPayment(this);
+    task = EndpointTask(this);
+    timeLog = EndpointTimeLog(this);
   }
 
   late final EndpointAuth auth;
@@ -259,12 +305,18 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointPayment payment;
 
+  late final EndpointTask task;
+
+  late final EndpointTimeLog timeLog;
+
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'auth': auth,
         'otp': otp,
         'mpesaTransaction': mpesaTransaction,
         'payment': payment,
+        'task': task,
+        'timeLog': timeLog,
       };
 
   @override

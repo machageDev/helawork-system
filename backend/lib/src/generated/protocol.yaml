@@ -13,7 +13,13 @@ mpesaTransaction:
   - getTransactionsForEmployer:
   - getTransactionById:
 payment:
-  - createRate:
-  - updateRate:
+  - withdrawPayment:
   - getActiveRate:
-  - getRatesForWorker:
+task:
+  - approveTimeLog:
+  - getApprovedHours:
+timeLog:
+  - createLog:
+  - approveLog:
+  - getLogsForWorker:
+  - getApprovedHours:

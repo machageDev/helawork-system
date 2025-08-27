@@ -2,73 +2,47 @@ import 'package:serverpod/serverpod.dart';
 import '../generated/protocol.dart';
 
 class PaymentEndpoint extends Endpoint {
-  // Create a new payment rate
-  Future<PaymentRate> createRate(
+  // Mock: Withdraw payment to M-PESA (Daraja API integration can go here later)
+  Future<String> withdrawPayment(
     Session session, {
-    required int employerId,
     required int workerId,
-    required double ratePerHour,
+    required String phoneNumber,
   }) async {
-    var rate = PaymentRate(
-      employerId: employerId,
-      workerId: workerId,
-      ratePerHour: ratePerHour,
-      effectiveFrom: DateTime.now(),
-      effectiveTo: null,
-      createdAt: DateTime.now(),
+    // Calculate approved earnings
+    var logs = await TimeLog.db.find(
+      session,
+      where: (l) => l.workerId.equals(workerId) & l.isApproved.equals(true),
     );
 
-    return await PaymentRate.db.insertRow(session, rate);
-  }
+    var totalHours = logs.fold<double>(
+      0.0,
+      (sum, log) => sum + (log.hoursWorked),
+    );
 
-  // Update payment rate by closing old one and inserting new
-  Future<PaymentRate> updateRate(
-    Session session, {
-    required int rateId,
-    required double newRatePerHour,
-  }) async {
-    var oldRate = await PaymentRate.db.findById(session, rateId);
-    if (oldRate == null) {
-      throw Exception("Rate not found");
+    var rate = await PaymentRate.db.findFirstRow(
+      session,
+      where: (r) => r.workerId.equals(workerId),
+    );
+
+    var amount = totalHours * (rate?.ratePerHour ?? 0);
+
+    if (amount <= 0) {
+      return "No approved earnings available for withdrawal.";
     }
 
-    oldRate.effectiveTo = DateTime.now();
-    await PaymentRate.db.updateRow(session, oldRate);
-
-    var newRate = PaymentRate(
-      employerId: oldRate.employerId,
-      workerId: oldRate.workerId,
-      ratePerHour: newRatePerHour,
-      effectiveFrom: DateTime.now(),
-      effectiveTo: null,
-      createdAt: DateTime.now(),
-    );
-
-    return await PaymentRate.db.insertRow(session, newRate);
+    // TODO: Integrate with Safaricom Daraja API here.
+    // For now, simulate success:
+    return "KES ${amount.toStringAsFixed(2)} sent to $phoneNumber via M-PESA";
   }
 
-  // Get active rate for a worker
+  // Optional: Fetch worker's active hourly rate
   Future<PaymentRate?> getActiveRate(
     Session session, {
     required int workerId,
   }) async {
     return await PaymentRate.db.findFirstRow(
       session,
-      where: (t) =>
-          t.workerId.equals(workerId) & t.effectiveTo.equals(null),
-    );
-  }
-
-  // Get all rates for a worker
-  Future<List<PaymentRate>> getRatesForWorker(
-    Session session, {
-    required int workerId,
-  }) async {
-    return await PaymentRate.db.find(
-      session,
-      where: (t) => t.workerId.equals(workerId),
-      orderBy: (t) => t.effectiveFrom,
-      orderDescending: true,
+      where: (r) => r.workerId.equals(workerId),
     );
   }
 }

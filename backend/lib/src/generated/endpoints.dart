@@ -14,6 +14,8 @@ import '../endpoints/auth_endpoint.dart' as _i2;
 import '../endpoints/endpoint_otp.dart' as _i3;
 import '../endpoints/mpesa_transaction.dart' as _i4;
 import '../endpoints/payment_endpoin.dart' as _i5;
+import '../endpoints/task_endpoint.dart' as _i6;
+import '../endpoints/time_log_endpoint.dart' as _i7;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -41,6 +43,18 @@ class Endpoints extends _i1.EndpointDispatch {
         ..initialize(
           server,
           'payment',
+          null,
+        ),
+      'task': _i6.TaskEndpoint()
+        ..initialize(
+          server,
+          'task',
+          null,
+        ),
+      'timeLog': _i7.TimeLogEndpoint()
+        ..initialize(
+          server,
+          'timeLog',
           null,
         ),
     };
@@ -347,22 +361,17 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'payment',
       endpoint: endpoints['payment']!,
       methodConnectors: {
-        'createRate': _i1.MethodConnector(
-          name: 'createRate',
+        'withdrawPayment': _i1.MethodConnector(
+          name: 'withdrawPayment',
           params: {
-            'employerId': _i1.ParameterDescription(
-              name: 'employerId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
             'workerId': _i1.ParameterDescription(
               name: 'workerId',
               type: _i1.getType<int>(),
               nullable: false,
             ),
-            'ratePerHour': _i1.ParameterDescription(
-              name: 'ratePerHour',
-              type: _i1.getType<double>(),
+            'phoneNumber': _i1.ParameterDescription(
+              name: 'phoneNumber',
+              type: _i1.getType<String>(),
               nullable: false,
             ),
           },
@@ -370,35 +379,10 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['payment'] as _i5.PaymentEndpoint).createRate(
+              (endpoints['payment'] as _i5.PaymentEndpoint).withdrawPayment(
             session,
-            employerId: params['employerId'],
             workerId: params['workerId'],
-            ratePerHour: params['ratePerHour'],
-          ),
-        ),
-        'updateRate': _i1.MethodConnector(
-          name: 'updateRate',
-          params: {
-            'rateId': _i1.ParameterDescription(
-              name: 'rateId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'newRatePerHour': _i1.ParameterDescription(
-              name: 'newRatePerHour',
-              type: _i1.getType<double>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['payment'] as _i5.PaymentEndpoint).updateRate(
-            session,
-            rateId: params['rateId'],
-            newRatePerHour: params['newRatePerHour'],
+            phoneNumber: params['phoneNumber'],
           ),
         ),
         'getActiveRate': _i1.MethodConnector(
@@ -419,8 +403,32 @@ class Endpoints extends _i1.EndpointDispatch {
             workerId: params['workerId'],
           ),
         ),
-        'getRatesForWorker': _i1.MethodConnector(
-          name: 'getRatesForWorker',
+      },
+    );
+    connectors['task'] = _i1.EndpointConnector(
+      name: 'task',
+      endpoint: endpoints['task']!,
+      methodConnectors: {
+        'approveTimeLog': _i1.MethodConnector(
+          name: 'approveTimeLog',
+          params: {
+            'timeLogId': _i1.ParameterDescription(
+              name: 'timeLogId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['task'] as _i6.TaskEndpoint).approveTimeLog(
+            session,
+            timeLogId: params['timeLogId'],
+          ),
+        ),
+        'getApprovedHours': _i1.MethodConnector(
+          name: 'getApprovedHours',
           params: {
             'workerId': _i1.ParameterDescription(
               name: 'workerId',
@@ -432,7 +440,97 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['payment'] as _i5.PaymentEndpoint).getRatesForWorker(
+              (endpoints['task'] as _i6.TaskEndpoint).getApprovedHours(
+            session,
+            workerId: params['workerId'],
+          ),
+        ),
+      },
+    );
+    connectors['timeLog'] = _i1.EndpointConnector(
+      name: 'timeLog',
+      endpoint: endpoints['timeLog']!,
+      methodConnectors: {
+        'createLog': _i1.MethodConnector(
+          name: 'createLog',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'taskId': _i1.ParameterDescription(
+              name: 'taskId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'hoursWorked': _i1.ParameterDescription(
+              name: 'hoursWorked',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i7.TimeLogEndpoint).createLog(
+            session,
+            workerId: params['workerId'],
+            taskId: params['taskId'],
+            hoursWorked: params['hoursWorked'],
+          ),
+        ),
+        'approveLog': _i1.MethodConnector(
+          name: 'approveLog',
+          params: {
+            'logId': _i1.ParameterDescription(
+              name: 'logId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i7.TimeLogEndpoint).approveLog(
+            session,
+            logId: params['logId'],
+          ),
+        ),
+        'getLogsForWorker': _i1.MethodConnector(
+          name: 'getLogsForWorker',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i7.TimeLogEndpoint).getLogsForWorker(
+            session,
+            workerId: params['workerId'],
+          ),
+        ),
+        'getApprovedHours': _i1.MethodConnector(
+          name: 'getApprovedHours',
+          params: {
+            'workerId': _i1.ParameterDescription(
+              name: 'workerId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['timeLog'] as _i7.TimeLogEndpoint).getApprovedHours(
             session,
             workerId: params['workerId'],
           ),

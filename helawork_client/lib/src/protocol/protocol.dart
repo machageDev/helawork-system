@@ -17,7 +17,7 @@ import 'task.dart' as _i5;
 import 'time_log.dart' as _i6;
 import 'user.dart' as _i7;
 import 'package:helawork_client/src/protocol/mpesa_payment.dart' as _i8;
-import 'package:helawork_client/src/protocol/payment.dart' as _i9;
+import 'package:helawork_client/src/protocol/time_log.dart' as _i9;
 export 'mpesa_payment.dart';
 export 'payment.dart';
 export 'reset_token.dart';
@@ -80,8 +80,8 @@ class Protocol extends _i1.SerializationManager {
           .map((e) => deserialize<_i8.MpesaTransaction>(e))
           .toList() as T;
     }
-    if (t == List<_i9.PaymentRate>) {
-      return (data as List).map((e) => deserialize<_i9.PaymentRate>(e)).toList()
+    if (t == List<_i9.TimeLog>) {
+      return (data as List).map((e) => deserialize<_i9.TimeLog>(e)).toList()
           as T;
     }
     return super.deserialize<T>(data, t);
