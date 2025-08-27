@@ -26,11 +26,14 @@ class TimeLogEndpoint extends Endpoint {
     required int logId,
   }) async {
     var log = await TimeLog.db.findById(session, logId);
-    if (log == null) throw Exception("Log not found");
+    if (log == null) {
+      throw Exception("Log not found");
+    }
 
     log.isApproved = true;
 
-    return await TimeLog.db.updateRow(session, log);
+    await TimeLog.db.updateRow(session, log);
+    return log;
   }
 
   // Get all logs for a worker
@@ -55,6 +58,9 @@ class TimeLogEndpoint extends Endpoint {
           l.workerId.equals(workerId) & l.isApproved.equals(true),
     );
 
-    return logs.fold(0.0, (sum, log) => sum + log.hoursWorked);
+    return logs.fold<double>(
+      0.0,
+      (sum, log) => sum + (log.hoursWorked),
+    );
   }
 }

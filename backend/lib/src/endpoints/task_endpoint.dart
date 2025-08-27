@@ -15,7 +15,10 @@ class TaskEndpoint extends Endpoint {
 
     log.isApproved = true;
 
-    return await TimeLog.db.updateRow(session, log);
+    // Save update
+    await TimeLog.db.updateRow(session, log);
+
+    return log;
   }
 
   // Get all approved hours for a worker
@@ -28,6 +31,10 @@ class TaskEndpoint extends Endpoint {
       where: (t) => t.workerId.equals(workerId) & t.isApproved.equals(true),
     );
 
-    return logs.fold(0.0, (sum, log) => sum + log.hoursWorked);
+    // Force fold to use double, handle null hoursWorked
+    return logs.fold<double>(
+      0.0,
+      (sum, log) => sum + (log.hoursWorked),
+    );
   }
 }
