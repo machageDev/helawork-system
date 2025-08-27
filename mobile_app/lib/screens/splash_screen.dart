@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// adjust path if needed
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,8 +17,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      await initClient(); //  initialize Serverpod client
-      await Future.delayed(const Duration(seconds: 2)); // (optional) show logo for 2s
+      // Optionally test connection with a simple call if you want
+      // e.g., await client.user.getUserByEmail('test@example.com');
+      
+      await Future.delayed(const Duration(seconds: 2)); // show splash 2s
+
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/login');
       }
