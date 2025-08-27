@@ -16,20 +16,18 @@ abstract class TimeLog implements _i1.SerializableModel {
     this.id,
     required this.workerId,
     required this.taskId,
-    required this.startedAt,
-    this.endedAt,
-    this.durationMinutes,
-    this.createdAt,
+    required this.hoursWorked,
+    required this.date,
+    required this.isApproved,
   });
 
   factory TimeLog({
     int? id,
     required int workerId,
     required int taskId,
-    required DateTime startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    DateTime? createdAt,
+    required double hoursWorked,
+    required DateTime date,
+    required bool isApproved,
   }) = _TimeLogImpl;
 
   factory TimeLog.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -37,15 +35,9 @@ abstract class TimeLog implements _i1.SerializableModel {
       id: jsonSerialization['id'] as int?,
       workerId: jsonSerialization['workerId'] as int,
       taskId: jsonSerialization['taskId'] as int,
-      startedAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
-      endedAt: jsonSerialization['endedAt'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
-      durationMinutes: jsonSerialization['durationMinutes'] as int?,
-      createdAt: jsonSerialization['createdAt'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      hoursWorked: (jsonSerialization['hoursWorked'] as num).toDouble(),
+      date: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['date']),
+      isApproved: jsonSerialization['isApproved'] as bool,
     );
   }
 
@@ -58,13 +50,11 @@ abstract class TimeLog implements _i1.SerializableModel {
 
   int taskId;
 
-  DateTime startedAt;
+  double hoursWorked;
 
-  DateTime? endedAt;
+  DateTime date;
 
-  int? durationMinutes;
-
-  DateTime? createdAt;
+  bool isApproved;
 
   /// Returns a shallow copy of this [TimeLog]
   /// with some or all fields replaced by the given arguments.
@@ -73,10 +63,9 @@ abstract class TimeLog implements _i1.SerializableModel {
     int? id,
     int? workerId,
     int? taskId,
-    DateTime? startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    DateTime? createdAt,
+    double? hoursWorked,
+    DateTime? date,
+    bool? isApproved,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -84,10 +73,9 @@ abstract class TimeLog implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'workerId': workerId,
       'taskId': taskId,
-      'startedAt': startedAt.toJson(),
-      if (endedAt != null) 'endedAt': endedAt?.toJson(),
-      if (durationMinutes != null) 'durationMinutes': durationMinutes,
-      if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      'hoursWorked': hoursWorked,
+      'date': date.toJson(),
+      'isApproved': isApproved,
     };
   }
 
@@ -104,18 +92,16 @@ class _TimeLogImpl extends TimeLog {
     int? id,
     required int workerId,
     required int taskId,
-    required DateTime startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    DateTime? createdAt,
+    required double hoursWorked,
+    required DateTime date,
+    required bool isApproved,
   }) : super._(
           id: id,
           workerId: workerId,
           taskId: taskId,
-          startedAt: startedAt,
-          endedAt: endedAt,
-          durationMinutes: durationMinutes,
-          createdAt: createdAt,
+          hoursWorked: hoursWorked,
+          date: date,
+          isApproved: isApproved,
         );
 
   /// Returns a shallow copy of this [TimeLog]
@@ -126,20 +112,17 @@ class _TimeLogImpl extends TimeLog {
     Object? id = _Undefined,
     int? workerId,
     int? taskId,
-    DateTime? startedAt,
-    Object? endedAt = _Undefined,
-    Object? durationMinutes = _Undefined,
-    Object? createdAt = _Undefined,
+    double? hoursWorked,
+    DateTime? date,
+    bool? isApproved,
   }) {
     return TimeLog(
       id: id is int? ? id : this.id,
       workerId: workerId ?? this.workerId,
       taskId: taskId ?? this.taskId,
-      startedAt: startedAt ?? this.startedAt,
-      endedAt: endedAt is DateTime? ? endedAt : this.endedAt,
-      durationMinutes:
-          durationMinutes is int? ? durationMinutes : this.durationMinutes,
-      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
+      hoursWorked: hoursWorked ?? this.hoursWorked,
+      date: date ?? this.date,
+      isApproved: isApproved ?? this.isApproved,
     );
   }
 }

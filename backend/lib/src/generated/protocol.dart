@@ -19,8 +19,6 @@ import 'time_log.dart' as _i7;
 import 'user.dart' as _i8;
 import 'package:helawork_server/src/generated/mpesa_payment.dart' as _i9;
 import 'package:helawork_server/src/generated/payment.dart' as _i10;
-import 'package:helawork_server/src/generated/task.dart' as _i11;
-import 'package:helawork_server/src/generated/time_log.dart' as _i12;
 export 'mpesa_payment.dart';
 export 'payment.dart';
 export 'reset_token.dart';
@@ -395,7 +393,7 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
-      name: 'time_log',
+      name: 'timelog',
       dartName: 'TimeLog',
       schema: 'public',
       module: 'helawork',
@@ -405,7 +403,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int?',
-          columnDefault: 'nextval(\'time_log_id_seq\'::regclass)',
+          columnDefault: 'nextval(\'timelog_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
           name: 'workerId',
@@ -420,55 +418,28 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
-          name: 'startedAt',
+          name: 'hoursWorked',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: false,
+          dartType: 'double',
+        ),
+        _i2.ColumnDefinition(
+          name: 'date',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: false,
           dartType: 'DateTime',
         ),
         _i2.ColumnDefinition(
-          name: 'endedAt',
-          columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: true,
-          dartType: 'DateTime?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'durationMinutes',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'createdAt',
-          columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: true,
-          dartType: 'DateTime?',
+          name: 'isApproved',
+          columnType: _i2.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
         ),
       ],
-      foreignKeys: [
-        _i2.ForeignKeyDefinition(
-          constraintName: 'time_log_fk_0',
-          columns: ['workerId'],
-          referenceTable: 'user',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'time_log_fk_1',
-          columns: ['taskId'],
-          referenceTable: 'task',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
-      ],
+      foreignKeys: [],
       indexes: [
         _i2.IndexDefinition(
-          indexName: 'time_log_pkey',
+          indexName: 'timelog_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -599,13 +570,6 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List)
           .map((e) => deserialize<_i10.PaymentRate>(e))
           .toList() as T;
-    }
-    if (t == List<_i11.Task>) {
-      return (data as List).map((e) => deserialize<_i11.Task>(e)).toList() as T;
-    }
-    if (t == List<_i12.TimeLog>) {
-      return (data as List).map((e) => deserialize<_i12.TimeLog>(e)).toList()
-          as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);

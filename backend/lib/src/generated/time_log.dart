@@ -17,20 +17,18 @@ abstract class TimeLog
     this.id,
     required this.workerId,
     required this.taskId,
-    required this.startedAt,
-    this.endedAt,
-    this.durationMinutes,
-    this.createdAt,
+    required this.hoursWorked,
+    required this.date,
+    required this.isApproved,
   });
 
   factory TimeLog({
     int? id,
     required int workerId,
     required int taskId,
-    required DateTime startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    DateTime? createdAt,
+    required double hoursWorked,
+    required DateTime date,
+    required bool isApproved,
   }) = _TimeLogImpl;
 
   factory TimeLog.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -38,15 +36,9 @@ abstract class TimeLog
       id: jsonSerialization['id'] as int?,
       workerId: jsonSerialization['workerId'] as int,
       taskId: jsonSerialization['taskId'] as int,
-      startedAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startedAt']),
-      endedAt: jsonSerialization['endedAt'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endedAt']),
-      durationMinutes: jsonSerialization['durationMinutes'] as int?,
-      createdAt: jsonSerialization['createdAt'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      hoursWorked: (jsonSerialization['hoursWorked'] as num).toDouble(),
+      date: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['date']),
+      isApproved: jsonSerialization['isApproved'] as bool,
     );
   }
 
@@ -61,13 +53,11 @@ abstract class TimeLog
 
   int taskId;
 
-  DateTime startedAt;
+  double hoursWorked;
 
-  DateTime? endedAt;
+  DateTime date;
 
-  int? durationMinutes;
-
-  DateTime? createdAt;
+  bool isApproved;
 
   @override
   _i1.Table<int?> get table => t;
@@ -79,10 +69,9 @@ abstract class TimeLog
     int? id,
     int? workerId,
     int? taskId,
-    DateTime? startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    DateTime? createdAt,
+    double? hoursWorked,
+    DateTime? date,
+    bool? isApproved,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -90,10 +79,9 @@ abstract class TimeLog
       if (id != null) 'id': id,
       'workerId': workerId,
       'taskId': taskId,
-      'startedAt': startedAt.toJson(),
-      if (endedAt != null) 'endedAt': endedAt?.toJson(),
-      if (durationMinutes != null) 'durationMinutes': durationMinutes,
-      if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      'hoursWorked': hoursWorked,
+      'date': date.toJson(),
+      'isApproved': isApproved,
     };
   }
 
@@ -103,10 +91,9 @@ abstract class TimeLog
       if (id != null) 'id': id,
       'workerId': workerId,
       'taskId': taskId,
-      'startedAt': startedAt.toJson(),
-      if (endedAt != null) 'endedAt': endedAt?.toJson(),
-      if (durationMinutes != null) 'durationMinutes': durationMinutes,
-      if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      'hoursWorked': hoursWorked,
+      'date': date.toJson(),
+      'isApproved': isApproved,
     };
   }
 
@@ -147,18 +134,16 @@ class _TimeLogImpl extends TimeLog {
     int? id,
     required int workerId,
     required int taskId,
-    required DateTime startedAt,
-    DateTime? endedAt,
-    int? durationMinutes,
-    DateTime? createdAt,
+    required double hoursWorked,
+    required DateTime date,
+    required bool isApproved,
   }) : super._(
           id: id,
           workerId: workerId,
           taskId: taskId,
-          startedAt: startedAt,
-          endedAt: endedAt,
-          durationMinutes: durationMinutes,
-          createdAt: createdAt,
+          hoursWorked: hoursWorked,
+          date: date,
+          isApproved: isApproved,
         );
 
   /// Returns a shallow copy of this [TimeLog]
@@ -169,26 +154,23 @@ class _TimeLogImpl extends TimeLog {
     Object? id = _Undefined,
     int? workerId,
     int? taskId,
-    DateTime? startedAt,
-    Object? endedAt = _Undefined,
-    Object? durationMinutes = _Undefined,
-    Object? createdAt = _Undefined,
+    double? hoursWorked,
+    DateTime? date,
+    bool? isApproved,
   }) {
     return TimeLog(
       id: id is int? ? id : this.id,
       workerId: workerId ?? this.workerId,
       taskId: taskId ?? this.taskId,
-      startedAt: startedAt ?? this.startedAt,
-      endedAt: endedAt is DateTime? ? endedAt : this.endedAt,
-      durationMinutes:
-          durationMinutes is int? ? durationMinutes : this.durationMinutes,
-      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
+      hoursWorked: hoursWorked ?? this.hoursWorked,
+      date: date ?? this.date,
+      isApproved: isApproved ?? this.isApproved,
     );
   }
 }
 
 class TimeLogTable extends _i1.Table<int?> {
-  TimeLogTable({super.tableRelation}) : super(tableName: 'time_log') {
+  TimeLogTable({super.tableRelation}) : super(tableName: 'timelog') {
     workerId = _i1.ColumnInt(
       'workerId',
       this,
@@ -197,20 +179,16 @@ class TimeLogTable extends _i1.Table<int?> {
       'taskId',
       this,
     );
-    startedAt = _i1.ColumnDateTime(
-      'startedAt',
+    hoursWorked = _i1.ColumnDouble(
+      'hoursWorked',
       this,
     );
-    endedAt = _i1.ColumnDateTime(
-      'endedAt',
+    date = _i1.ColumnDateTime(
+      'date',
       this,
     );
-    durationMinutes = _i1.ColumnInt(
-      'durationMinutes',
-      this,
-    );
-    createdAt = _i1.ColumnDateTime(
-      'createdAt',
+    isApproved = _i1.ColumnBool(
+      'isApproved',
       this,
     );
   }
@@ -219,23 +197,20 @@ class TimeLogTable extends _i1.Table<int?> {
 
   late final _i1.ColumnInt taskId;
 
-  late final _i1.ColumnDateTime startedAt;
+  late final _i1.ColumnDouble hoursWorked;
 
-  late final _i1.ColumnDateTime endedAt;
+  late final _i1.ColumnDateTime date;
 
-  late final _i1.ColumnInt durationMinutes;
-
-  late final _i1.ColumnDateTime createdAt;
+  late final _i1.ColumnBool isApproved;
 
   @override
   List<_i1.Column> get columns => [
         id,
         workerId,
         taskId,
-        startedAt,
-        endedAt,
-        durationMinutes,
-        createdAt,
+        hoursWorked,
+        date,
+        isApproved,
       ];
 }
 

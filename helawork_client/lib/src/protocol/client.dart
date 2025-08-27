@@ -14,9 +14,7 @@ import 'dart:async' as _i2;
 import 'package:helawork_client/src/protocol/user.dart' as _i3;
 import 'package:helawork_client/src/protocol/mpesa_payment.dart' as _i4;
 import 'package:helawork_client/src/protocol/payment.dart' as _i5;
-import 'package:helawork_client/src/protocol/task.dart' as _i6;
-import 'package:helawork_client/src/protocol/time_log.dart' as _i7;
-import 'protocol.dart' as _i8;
+import 'protocol.dart' as _i6;
 
 /// {@category Endpoint}
 class EndpointAuth extends _i1.EndpointRef {
@@ -221,106 +219,6 @@ class EndpointPayment extends _i1.EndpointRef {
       );
 }
 
-/// {@category Endpoint}
-class EndpointTask extends _i1.EndpointRef {
-  EndpointTask(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'task';
-
-  _i2.Future<_i6.Task> createTask(
-    int employerId,
-    String title,
-    String description,
-    DateTime deadline,
-  ) =>
-      caller.callServerEndpoint<_i6.Task>(
-        'task',
-        'createTask',
-        {
-          'employerId': employerId,
-          'title': title,
-          'description': description,
-          'deadline': deadline,
-        },
-      );
-
-  _i2.Future<_i6.Task?> assignTask(
-    int taskId,
-    int workerId,
-  ) =>
-      caller.callServerEndpoint<_i6.Task?>(
-        'task',
-        'assignTask',
-        {
-          'taskId': taskId,
-          'workerId': workerId,
-        },
-      );
-
-  _i2.Future<_i6.Task?> updateTaskStatus(
-    int taskId,
-    String status,
-  ) =>
-      caller.callServerEndpoint<_i6.Task?>(
-        'task',
-        'updateTaskStatus',
-        {
-          'taskId': taskId,
-          'status': status,
-        },
-      );
-
-  _i2.Future<List<_i6.Task>> getTasksForEmployer(int employerId) =>
-      caller.callServerEndpoint<List<_i6.Task>>(
-        'task',
-        'getTasksForEmployer',
-        {'employerId': employerId},
-      );
-
-  _i2.Future<List<_i6.Task>> getTasksForWorker(int workerId) =>
-      caller.callServerEndpoint<List<_i6.Task>>(
-        'task',
-        'getTasksForWorker',
-        {'workerId': workerId},
-      );
-}
-
-/// {@category Endpoint}
-class EndpointTimeLog extends _i1.EndpointRef {
-  EndpointTimeLog(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'timeLog';
-
-  _i2.Future<_i7.TimeLog> startLog(
-    int workerId,
-    int taskId,
-  ) =>
-      caller.callServerEndpoint<_i7.TimeLog>(
-        'timeLog',
-        'startLog',
-        {
-          'workerId': workerId,
-          'taskId': taskId,
-        },
-      );
-
-  _i2.Future<_i7.TimeLog?> stopLog(int logId) =>
-      caller.callServerEndpoint<_i7.TimeLog?>(
-        'timeLog',
-        'stopLog',
-        {'logId': logId},
-      );
-
-  _i2.Future<List<_i7.TimeLog>> getLogsForWorker(int workerId) =>
-      caller.callServerEndpoint<List<_i7.TimeLog>>(
-        'timeLog',
-        'getLogsForWorker',
-        {'workerId': workerId},
-      );
-}
-
 class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
@@ -337,7 +235,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i8.Protocol(),
+          _i6.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -351,8 +249,6 @@ class Client extends _i1.ServerpodClientShared {
     otp = EndpointOtp(this);
     mpesaTransaction = EndpointMpesaTransaction(this);
     payment = EndpointPayment(this);
-    task = EndpointTask(this);
-    timeLog = EndpointTimeLog(this);
   }
 
   late final EndpointAuth auth;
@@ -363,18 +259,12 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointPayment payment;
 
-  late final EndpointTask task;
-
-  late final EndpointTimeLog timeLog;
-
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'auth': auth,
         'otp': otp,
         'mpesaTransaction': mpesaTransaction,
         'payment': payment,
-        'task': task,
-        'timeLog': timeLog,
       };
 
   @override

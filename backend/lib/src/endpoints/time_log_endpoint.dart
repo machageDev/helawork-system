@@ -2,36 +2,59 @@ import 'package:serverpod/serverpod.dart';
 import '../generated/protocol.dart';
 
 class TimeLogEndpoint extends Endpoint {
-  // Start logging manually
- Future<TimeLog> startLog(Session session, int workerId, int taskId) async {
-  var log = TimeLog(
-    workerId: workerId,
-    taskId: taskId,
-    startedAt: DateTime.now(),
-    createdAt: DateTime.now(),
-  );
+  // Create a new time log (manual entry or after stop timer)
+  Future<TimeLog> createLog(
+    Session session, {
+    required int workerId,
+    required int taskId,
+    required double hoursWorked,
+  }) async {
+    var log = TimeLog(
+      workerId: workerId,
+      taskId: taskId,
+      hoursWorked: hoursWorked,
+      date: DateTime.now(),
+      isApproved: false, // default pending approval
+    );
 
-  await TimeLog.db.insertRow(session, log);
-  return log;
-}
+    return await TimeLog.db.insertRow(session, log);
+  }
 
-
-  // Stop log
-  Future<TimeLog?> stopLog(Session session, int logId) async {
+  // Approve a log (employer action)
+  Future<TimeLog> approveLog(
+    Session session, {
+    required int logId,
+  }) async {
     var log = await TimeLog.db.findById(session, logId);
     if (log == null) throw Exception("Log not found");
 
-    log.endedAt = DateTime.now();
-    log.durationMinutes = log.endedAt!.difference(log.startedAt).inMinutes;
+    log.isApproved = true;
 
-    await TimeLog.db.updateRow(session, log);
-    return log;
+    return await TimeLog.db.updateRow(session, log);
   }
 
-  // Worker’s logs
-  Future<List<TimeLog>> getLogsForWorker(Session session, int workerId) async {
-    return await TimeLog.db.find(session,
+  // Get all logs for a worker
+  Future<List<TimeLog>> getLogsForWorker(
+    Session session, {
+    required int workerId,
+  }) async {
+    return await TimeLog.db.find(
+      session,
       where: (l) => l.workerId.equals(workerId),
     );
+  }
+
+  // Get total approved hours (used for payments)
+  Future<double> getApprovedHours(
+    Session session, {
+    required int workerId,
+  }) async {
+    var logs = await TimeLog.db.find(
+      session,
+      where: (l) =>
+          l.workerId.equals(workerId) & l.isApproved.equals(true),
+    );
+
+    return logs.fold(0.0, (sum, log) => sum + log.hoursWorked);
   }
 }

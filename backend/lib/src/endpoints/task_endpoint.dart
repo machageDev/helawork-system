@@ -2,64 +2,32 @@ import 'package:serverpod/serverpod.dart';
 import '../generated/protocol.dart';
 
 class TaskEndpoint extends Endpoint {
-  
-  Future<Task> createTask(
-    Session session,
-    int employerId,
-    String title,
-    String description,
-    DateTime deadline,
-  ) async {
-    var task = Task(
-      employerId: employerId,
-      workerId: null,
-      title: title,
-      description: description,
-      deadline: deadline,
-      status: 'pending',
-      createdAt: DateTime.now(),
-    );
+  // Approve a worker's logged hours
+  Future<TimeLog> approveTimeLog(
+    Session session, {
+    required int timeLogId,
+  }) async {
+    var log = await TimeLog.db.findById(session, timeLogId);
 
-    await Task.db.insertRow(session, task);
-    return task;
+    if (log == null) {
+      throw Exception("TimeLog not found");
+    }
+
+    log.isApproved = true;
+
+    return await TimeLog.db.updateRow(session, log);
   }
 
-  //  Assign task to worker
-  Future<Task?> assignTask(Session session, int taskId, int workerId) async {
-    var task = await Task.db.findById(session, taskId);
-    if (task == null) throw Exception('Task not found');
-
-    task.workerId = workerId;
-    task.status = 'in_progress';
-
-    await Task.db.updateRow(session, task);
-    return task;
-  }
-
-  //  Update task status
-  Future<Task?> updateTaskStatus(Session session, int taskId, String status) async {
-    var task = await Task.db.findById(session, taskId);
-    if (task == null) throw Exception('Task not found');
-
-    task.status = status;
-    await Task.db.updateRow(session, task);
-
-    return task;
-  }
-
-  //  Get all tasks for an employer
-  Future<List<Task>> getTasksForEmployer(Session session, int employerId) async {
-    return await Task.db.find(
+  // Get all approved hours for a worker
+  Future<double> getApprovedHours(
+    Session session, {
+    required int workerId,
+  }) async {
+    var logs = await TimeLog.db.find(
       session,
-      where: (t) => t.employerId.equals(employerId),
+      where: (t) => t.workerId.equals(workerId) & t.isApproved.equals(true),
     );
-  }
 
-  //  Get all tasks for a worker
-  Future<List<Task>> getTasksForWorker(Session session, int workerId) async {
-    return await Task.db.find(
-      session,
-      where: (t) => t.workerId.equals(workerId),
-    );
+    return logs.fold(0.0, (sum, log) => sum + log.hoursWorked);
   }
 }

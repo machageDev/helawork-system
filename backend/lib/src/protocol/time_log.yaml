@@ -1,10 +1,8 @@
 class: TimeLog
-table: time_log
+table: timelog
 fields:
-  id: int?
-  workerId: int, relation(parent=user)
-  taskId: int, relation(parent=task)
-  startedAt: DateTime
-  endedAt: DateTime?
-  durationMinutes: int?
-  createdAt: DateTime?
+  workerId: int
+  taskId: int
+  hoursWorked: double
+  date: DateTime
+  isApproved: bool
